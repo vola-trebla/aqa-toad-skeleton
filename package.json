@@ -24,6 +24,8 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.44.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
     "@types/node": "^20.12.7",
     "allure-playwright": "^3.0.0-beta.2",
     "eslint": "^8.57.0",
