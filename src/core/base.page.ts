@@ -27,10 +27,7 @@ export abstract class BasePage {
         locator.click(),
       ]);
     } else if (options?.waitForNavigation) {
-      await Promise.all([
-        this.page.waitForNavigation(),
-        locator.click(),
-      ]);
+      await Promise.all([this.page.waitForNavigation(), locator.click()]);
     } else {
       await locator.click();
     }

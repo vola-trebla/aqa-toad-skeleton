@@ -3,7 +3,10 @@ import { Locator, Page } from '@playwright/test';
 export abstract class BaseComponent {
   protected readonly root: Locator;
 
-  constructor(protected readonly page: Page, selector: string) {
+  constructor(
+    protected readonly page: Page,
+    selector: string
+  ) {
     this.root = page.locator(selector);
   }
 

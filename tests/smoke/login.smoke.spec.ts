@@ -7,10 +7,10 @@ test.describe('OrangeHRM - Employee Management (PIM)', () => {
 
   test('должен искать сотрудника по ID', async ({ pimListPage }) => {
     await pimListPage.navigate();
-    
+
     // В демо-данных обычно есть ID 0001
     await pimListPage.searchEmployeeById('0001');
-    
+
     const rowCount = await pimListPage.table.getRowCount();
     expect(rowCount).toBeGreaterThan(0);
   });

@@ -28,10 +28,12 @@ Sync is async — after triggering an action, wait ~15-30 sec before checking.
 ### Our GraphQL Admin API
 
 Two roles available:
+
 - **platform_admin** — full access, can manage orgs, companies, offers, users
 - **company_admin** — scoped to one company
 
 Auth flow (same for all envs):
+
 ```bash
 # Step 1: get JWT
 curl -s -X POST "https://<gateway>/graphql" \
@@ -66,18 +68,19 @@ X-Shopify-Access-Token: <SHOPIFY_TOKEN>
 
 ## Key entities and how they map
 
-| Our system | Shopify |
-|------------|---------|
-| Organization | Company (`externalId` = our org ID) |
+| Our system              | Shopify                                         |
+| ----------------------- | ----------------------------------------------- |
+| Organization            | Company (`externalId` = our org ID)             |
 | Company (linked to org) | CompanyLocation (`externalId` = our company ID) |
-| User | Customer + CompanyContact |
-| Order | Order / DraftOrder |
+| User                    | Customer + CompanyContact                       |
+| Order                   | Order / DraftOrder                              |
 
 ---
 
 ## Verification patterns
 
 ### Check if org synced to Shopify as Company
+
 ```graphql
 # Shopify Admin API
 query {
@@ -86,13 +89,16 @@ query {
       id
       name
       externalId
-      locationsCount { count }
+      locationsCount {
+        count
+      }
     }
   }
 }
 ```
 
 ### Check if company location synced
+
 ```graphql
 # Shopify Admin API — find location inside company
 query {
@@ -102,7 +108,7 @@ query {
         nodes {
           id
           name
-          externalId   # should match our company ID
+          externalId # should match our company ID
         }
       }
     }
@@ -111,6 +117,7 @@ query {
 ```
 
 ### Check user synced as Shopify customer
+
 ```graphql
 # Shopify Admin API
 query {
@@ -127,6 +134,7 @@ query {
 ```
 
 ### Check offer synced as Shopify product variant
+
 ```graphql
 # Shopify Admin API
 query {
@@ -135,7 +143,10 @@ query {
       id
       sku
       title
-      product { id title }
+      product {
+        id
+        title
+      }
     }
   }
 }
@@ -146,6 +157,7 @@ query {
 ## Our DB checks (marketplace DB)
 
 ### Organization exists
+
 ```sql
 SELECT id, name, idempotency_key, deleted_at
 FROM organizations
@@ -153,6 +165,7 @@ WHERE name LIKE '%<search>%';
 ```
 
 ### Company linked to org
+
 ```sql
 SELECT c.id, c.name, c.code, oc.organization_id
 FROM companies c
@@ -161,6 +174,7 @@ WHERE oc.organization_id = '<org_id>';
 ```
 
 ### Shopify external mapping for offer
+
 ```sql
 SELECT oem.source_type, oem.external_mapping_id, oem.created_at
 FROM offer_external_mappings oem
@@ -192,6 +206,7 @@ WHERE o.sku = '<sku>' AND oem.source_type = 'shopify';
 ## Reference: existing automated tests
 
 `Thor-Partfinder-API-Autotests/connector/tests/` — 3 tests already cover:
+
 - `test_create_org_syncs_to_shopify` — org creation → Shopify Company
 - `test_company_linked_creates_shopify_location` — link company → Shopify Location
 - `test_update_org_name_syncs_to_shopify` — name update → Shopify Company name

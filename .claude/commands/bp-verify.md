@@ -11,6 +11,7 @@ Verify that BrightPearl sync happened correctly for an offer or distributor.
 ## Checks to run
 
 ### 1. Mapping exists
+
 ```sql
 SELECT o.sku, d.name as distributor,
        oem.external_mapping_id as bp_product_id,
@@ -25,6 +26,7 @@ LIMIT 10;
 ```
 
 ### 2. SKU = friendly_id check
+
 ```sql
 -- catalog db
 SELECT pfi.friendly_id, p.manufacturer_number
@@ -47,6 +49,7 @@ BP Sync status for <sku> / <distributor>:
 ```
 
 If no mapping found — clearly state "not synced to BrightPearl" and check if:
+
 - Feature flag `brightPearlSync.enabled` is on for this env
 - Distributor is in `allowedDistributorIdempotencyKeys`
 - Offer belongs to Airxcel or Elk Mountain

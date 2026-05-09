@@ -23,10 +23,7 @@ test.describe('Ticket Lifecycle — state machine', () => {
     expect(await ticketPage.getStatus()).toBe('Closed');
   });
 
-  test('нельзя закрыть тикет без резолюции', async ({
-    authenticatedPage,
-    testTicket,
-  }) => {
+  test('нельзя закрыть тикет без резолюции', async ({ authenticatedPage, testTicket }) => {
     const ticketPage = new TicketDetailPage(authenticatedPage);
 
     await authenticatedPage.goto(`/tickets/${testTicket.id}`);

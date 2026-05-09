@@ -13,9 +13,7 @@ export async function retryAction<T>(
       return await action();
     } catch (error) {
       if (attempt === maxRetries) {
-        throw new Error(
-          `${description} failed after ${maxRetries} attempts: ${error}`
-        );
+        throw new Error(`${description} failed after ${maxRetries} attempts: ${error}`);
       }
       console.log(
         `${description} — attempt ${attempt}/${maxRetries} failed, retrying in ${delayMs}ms...`

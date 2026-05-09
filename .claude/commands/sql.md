@@ -7,6 +7,7 @@ Run a SQL query against any env. Handles tunnel check automatically.
 `/sql <env> <db> <query>` or `/sql <env> <db>` (then user provides query next)
 
 Examples:
+
 - `/sql dev2 marketplace SELECT * FROM offers WHERE sku = 'AX-005' LIMIT 5`
 - `/sql stage catalog SELECT COUNT(*) FROM products WHERE deleted_at IS NULL`
 - `/sql prod catalog` (then wait for query)

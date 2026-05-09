@@ -4,7 +4,7 @@ You are a senior SDET on Thor-Partfinder. Fetch the Jira ticket provided by the 
 
 ## Input
 
-User provides a ticket key (e.g. `TRP-12345`). 
+User provides a ticket key (e.g. `TRP-12345`).
 
 ## Step 0 - Fetch Issue & Dev Status
 
@@ -45,32 +45,40 @@ A ready-to-execute test plan. Not theory — concrete steps with real data, real
 ## Structure
 
 ```
+
 ## Test Plan — TRP-XXXXX: <title>
 
 ### What's being tested
+
 (1-3 sentences: feature summary in plain language)
 
 ### Environment
+
 - Recommended env and why
 - Prerequisites (tunnels, feature flags, test data, deployments needed)
 
 ### Test Cases
 
 #### TC-1: <scenario name>
+
 **Goal:** what this checks
 **Steps:**
+
 1. ...
 2. ...
-**Expected:** what should happen
-**Verify:** SQL / GraphQL / S3 check to confirm
+   **Expected:** what should happen
+   **Verify:** SQL / GraphQL / S3 check to confirm
 
 #### TC-2: ...
 
 ### Edge cases to consider
+
 (bullet list of non-obvious scenarios worth checking — data boundaries, concurrency, missing data, wrong distributor, etc.)
 
 ### Out of scope
+
 (what's explicitly NOT tested and why)
+
 ```
 
 ## Rules
@@ -93,3 +101,4 @@ A ready-to-execute test plan. Not theory — concrete steps with real data, real
 ---
 
 Now fetch the ticket the user provided and generate the test plan.
+```

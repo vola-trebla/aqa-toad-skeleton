@@ -10,7 +10,14 @@
     "test:api": "npx playwright test --project=api",
     "test:regression": "npx playwright test --project=regression-chrome",
     "lint": "eslint . --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,js,json,md}": [
+      "prettier --write"
+    ]
   },
   "keywords": [
     "playwright",
@@ -24,13 +31,16 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.44.0",
+    "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
-    "@types/node": "^20.12.7",
     "allure-playwright": "^3.0.0-beta.2",
+    "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.3",
     "typescript": "^5.4.5",
-    "zod": "^3.23.4",
-    "dotenv": "^16.4.5"
+    "zod": "^3.23.4"
   }
 }

@@ -20,9 +20,7 @@ export class TicketsApiClient {
   }
 
   async getById(id: string): Promise<Ticket> {
-    const response = await this.request.get(
-      `${config.API_URL}/api/tickets/${id}`
-    );
+    const response = await this.request.get(`${config.API_URL}/api/tickets/${id}`);
     const body = await response.json();
     return ticketSchema.parse(body);
   }
@@ -43,10 +41,9 @@ export class TicketsApiClient {
   }
 
   async changeStatus(id: string, status: string): Promise<Ticket> {
-    const response = await this.request.patch(
-      `${config.API_URL}/api/tickets/${id}/status`,
-      { data: { status } }
-    );
+    const response = await this.request.patch(`${config.API_URL}/api/tickets/${id}/status`, {
+      data: { status },
+    });
     const body = await response.json();
     return ticketSchema.parse(body);
   }

@@ -1,9 +1,7 @@
 import { test, expect } from '../../src/fixtures';
 
 test.describe('Tickets API', () => {
-  test('создание тикета возвращает валидную структуру', async ({
-    ticketsApi,
-  }) => {
+  test('создание тикета возвращает валидную структуру', async ({ ticketsApi }) => {
     const ticketData = {
       title: 'API test ticket',
       description: 'Created via API test',
@@ -20,10 +18,7 @@ test.describe('Tickets API', () => {
     await ticketsApi.delete(ticket.id);
   });
 
-  test('смена статуса через API отражается корректно', async ({
-    ticketsApi,
-    testTicket,
-  }) => {
+  test('смена статуса через API отражается корректно', async ({ ticketsApi, testTicket }) => {
     const updated = await ticketsApi.changeStatus(testTicket.id, 'Assigned');
 
     expect(updated.status).toBe('Assigned');

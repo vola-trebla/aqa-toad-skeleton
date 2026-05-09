@@ -11,6 +11,7 @@ User writes `/offer-check AX-005 dev2` or `/offer-check efe5ee89-... dev2`
 Run all queries against the specified env (default: dev2). Show results in a compact table or bullet list.
 
 ### 1. Marketplace DB — offer status
+
 ```sql
 SELECT o.id, o.sku, o.idempotency_key, o.deleted_at,
        o.original_name, o.original_manufacturer_number,
@@ -22,6 +23,7 @@ ORDER BY o.created_at DESC;
 ```
 
 ### 2. External mappings (Shopify, BrightPearl)
+
 ```sql
 SELECT oem.source_type, oem.external_mapping_id, oem.created_at, oem.deleted_at
 FROM offer_external_mappings oem
@@ -29,6 +31,7 @@ WHERE oem.offer_id = '<offer_id>';
 ```
 
 ### 3. Catalog DB — linked product + friendly_id
+
 ```sql
 -- Connect via same tunnel, db=catalog
 SELECT p.idempotency_key, p.manufacturer_number, pfi.friendly_id

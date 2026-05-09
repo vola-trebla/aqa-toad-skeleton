@@ -10,6 +10,7 @@ Search products or offers in OpenSearch index.
 `/os-search id <uuid>` - direct document lookup
 
 Examples:
+
 - `/os-search product 77058`
 - `/os-search offer AX-005`
 - `/os-search id 81d04eba-5c92-5cb2-89a3-a42a3ecec2ee`
@@ -23,6 +24,7 @@ Examples:
 ## Logic
 
 ### Direct ID lookup
+
 ```bash
 curl -s --aws-sigv4 "aws:amz:us-east-2:es" \
   --user "<access_key>:<secret_key>" \
@@ -30,6 +32,7 @@ curl -s --aws-sigv4 "aws:amz:us-east-2:es" \
 ```
 
 ### Search by field
+
 ```bash
 curl -s --aws-sigv4 "aws:amz:us-east-2:es" \
   --user "<access_key>:<secret_key>" \
@@ -47,6 +50,7 @@ curl -s --aws-sigv4 "aws:amz:us-east-2:es" \
 ```
 
 ### Indices
+
 - `products_index` - products (search by name, manufacturer_number, idempotency_key)
 - `offers_index` - offers (search by sku, offer_id)
 

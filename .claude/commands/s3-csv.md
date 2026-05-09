@@ -15,11 +15,13 @@ value1;value2;value3
 ```
 
 ### action column (required in most CSVs)
+
 - `insert` - create new record
 - `update` - update existing
 - `delete` - soft delete
 
 ### Common gotchas
+
 - JSON fields (categories, assemblies, etc.) must be valid JSON inside the CSV cell
 - Double quotes inside JSON strings must be escaped as `""` (CSV escaping)
 - Example: `"[{""id"": ""11"", ""nm"": ""Other""}]"`
@@ -30,11 +32,11 @@ value1;value2;value3
 
 ## S3 Buckets
 
-| Env   | Delta bucket                  | Export sources bucket                    |
-|-------|-------------------------------|------------------------------------------|
-| dev2  | partfinder-dev2-delta         | partfinder-dev2-export-sources           |
-| stage | partfinder-stage-delta        | partfinder-stage-export-sources          |
-| prod  | partfinder-prod-delta         | partfinder-prod-export-sources           |
+| Env   | Delta bucket           | Export sources bucket           |
+| ----- | ---------------------- | ------------------------------- |
+| dev2  | partfinder-dev2-delta  | partfinder-dev2-export-sources  |
+| stage | partfinder-stage-delta | partfinder-stage-export-sources |
+| prod  | partfinder-prod-delta  | partfinder-prod-export-sources  |
 
 **Distributor CSV path:** `s3://partfinder-{env}-delta/distributors/<Distributor Name>/`
 **Other paths:** `s3://partfinder-{env}-delta/user/`, `s3://partfinder-{env}-delta/company/`
@@ -56,6 +58,7 @@ export AWS_DEFAULT_REGION=us-east-2
 ```
 
 Or inline per command:
+
 ```bash
 AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KEY=... AWS_DEFAULT_REGION=us-east-2 aws s3 ...
 ```
@@ -65,28 +68,34 @@ AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KEY=... AWS_DEFAULT_REGION=us-east-2 aws
 ## Common S3 Operations
 
 ### Upload CSV to trigger pipeline
+
 ```bash
 aws s3 cp local_file.csv \
   "s3://partfinder-dev2-delta/distributors/Airxcel/airxcel_$(date +%Y%m%d_%H%M%S).csv"
 ```
+
 > Filename must be unique — append timestamp to avoid collisions.
 
 ### List files in bucket path
+
 ```bash
 aws s3 ls "s3://partfinder-dev2-delta/distributors/Airxcel/" | tail -10
 ```
 
 ### Download file
+
 ```bash
 aws s3 cp "s3://partfinder-dev2-delta/distributors/Airxcel/filename.csv" ./local.csv
 ```
 
 ### Read file content directly (without downloading)
+
 ```bash
 aws s3 cp "s3://partfinder-dev2-delta/distributors/Airxcel/filename.csv" -
 ```
 
 ### S3 Select — search inside large CSV without downloading
+
 ```bash
 aws s3api select-object-content \
   --bucket partfinder-dev2-export-sources \
@@ -96,10 +105,12 @@ aws s3api select-object-content \
   --input-serialization '{"CSV": {"FileHeaderInfo": "NONE", "FieldDelimiter": ";"}}' \
   --output-serialization '{"CSV": {}}' /dev/stdout
 ```
+
 > `FileHeaderInfo: NONE` = columns are `_1`, `_2`, etc.
 > `FileHeaderInfo: USE` = columns by header name.
 
 ### List all files recursively (search across distributor)
+
 ```bash
 aws s3 ls "s3://partfinder-dev2-delta/distributors/" --recursive | grep -i "airxcel"
 ```
@@ -120,6 +131,7 @@ Wait: ~30-60 sec after upload before checking DB
 ```
 
 ### Verify import happened
+
 ```sql
 -- Check offers appeared (marketplace db)
 SELECT o.sku, o.deleted_at, d.name
@@ -135,6 +147,7 @@ ORDER BY o.created_at DESC;
 ## Distributor CSV structure (offers)
 
 Minimal required columns:
+
 ```
 offer_id;offer_sku;manufacturer_number;name;other_manufacturer_numbers;categories;
 documents;assemblies;assembly_parts;type;barcode;inventory;
@@ -144,6 +157,7 @@ offer_price_dealer;offer_price_retail;manufacturer_id;manufacturer_name;action
 ```
 
 Extended (Elk Mountain / Airxcel) — additional columns:
+
 ```
 sell_if_no_stock_b2b;sell_if_no_stock_b2c;dimensions;allow_b2c;b2c_price_override
 ```

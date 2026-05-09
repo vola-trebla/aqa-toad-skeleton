@@ -1,9 +1,4 @@
-import type {
-  Reporter,
-  FullResult,
-  TestCase,
-  TestResult,
-} from '@playwright/test/reporter';
+import type { Reporter, FullResult, TestCase, TestResult } from '@playwright/test/reporter';
 
 class SlackReporter implements Reporter {
   private passed = 0;

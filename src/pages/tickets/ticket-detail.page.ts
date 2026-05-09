@@ -32,11 +32,10 @@ export class TicketDetailPage extends BasePage {
 
   async changeStatus(newStatus: TicketStatus): Promise<void> {
     await this.page.locator(this.selectors.changeStatusBtn).click();
-    
-    await this.clickAndWait(
-      this.page.locator(this.selectors.statusOption(newStatus)),
-      { waitForResponse: '/api/tickets/' }
-    );
+
+    await this.clickAndWait(this.page.locator(this.selectors.statusOption(newStatus)), {
+      waitForResponse: '/api/tickets/',
+    });
 
     if (await this.modal.isVisible()) {
       await this.modal.confirm();
@@ -45,10 +44,9 @@ export class TicketDetailPage extends BasePage {
 
   async addComment(text: string): Promise<void> {
     await this.page.locator(this.selectors.commentInput).fill(text);
-    await this.clickAndWait(
-      this.page.locator(this.selectors.addCommentBtn),
-      { waitForResponse: '/api/comments' }
-    );
+    await this.clickAndWait(this.page.locator(this.selectors.addCommentBtn), {
+      waitForResponse: '/api/comments',
+    });
   }
 
   async getCommentsCount(): Promise<number> {

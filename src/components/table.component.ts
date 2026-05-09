@@ -23,9 +23,7 @@ export class TableComponent extends BaseComponent {
   }
 
   async sortByColumn(columnName: string): Promise<void> {
-    await this.root
-      .locator(`th`, { hasText: columnName })
-      .click();
+    await this.root.locator(`th`, { hasText: columnName }).click();
   }
 
   async waitForData(): Promise<void> {
