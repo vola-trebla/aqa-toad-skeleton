@@ -1,0 +1,30 @@
+name: Nightly Regression
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+    container:
+      image: mcr.microsoft.com/playwright:v1.44.0-jammy
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx playwright test --project=regression-chrome --shard=${{ matrix.shard }}/4
+        env:
+          BASE_URL: ${{ secrets.STAGING_URL }}
+          API_URL: ${{ secrets.API_URL }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression-shard-${{ matrix.shard }}
+          path: test-results/

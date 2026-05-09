@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  tests-shard-1:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: npx playwright test --shard=1/2 --project=regression-chrome
+    environment:
+      - BASE_URL=${BASE_URL}
+      - API_URL=${API_URL}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ../results/shard-1:/app/test-results
+
+  tests-shard-2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: npx playwright test --shard=2/2 --project=regression-chrome
+    environment:
+      - BASE_URL=${BASE_URL}
+      - API_URL=${API_URL}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ../results/shard-2:/app/test-results

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+screenshots/
+videos/
+.env
+.npm_cache
+.claude/settings.local.json

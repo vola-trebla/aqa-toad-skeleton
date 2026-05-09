@@ -1,0 +1,27 @@
+name: Smoke Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.44.0-jammy
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx playwright test --project=smoke
+        env:
+          BASE_URL: ${{ secrets.STAGING_URL }}
+          API_URL: ${{ secrets.API_URL }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: smoke-results
+          path: test-results/
