@@ -4,10 +4,10 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const envSchema = z.object({
-  BASE_URL: z.string().url(),
-  API_URL: z.string().url(),
-  ADMIN_EMAIL: z.string().email(),
-  ADMIN_PASSWORD: z.string().min(1),
+  BASE_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
+  API_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
+  ADMIN_EMAIL: z.string().default('Admin'),
+  ADMIN_PASSWORD: z.string().default('admin123'),
   ENV: z.enum(['staging', 'production', 'local']).default('staging'),
   CI: z.boolean().default(false),
   SLACK_WEBHOOK: z.string().url().optional(),

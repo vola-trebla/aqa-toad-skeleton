@@ -7,7 +7,8 @@ export class TableComponent extends BaseComponent {
   }
 
   get rows(): Locator {
-    return this.root.locator('tbody tr');
+    // Поддержка как стандартных tr, так и кастомных карточек OrangeHRM
+    return this.root.locator('tbody tr, .oxd-table-body .oxd-table-card');
   }
 
   async getRowCount(): Promise<number> {

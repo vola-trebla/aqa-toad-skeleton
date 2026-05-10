@@ -17,6 +17,7 @@ export default defineConfig({
   ],
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    headless: process.env.HEADLESS !== 'false', // По умолчанию headless, если HEADLESS=false — будет headed
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
