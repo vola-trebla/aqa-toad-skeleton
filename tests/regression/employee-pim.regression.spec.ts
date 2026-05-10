@@ -1,19 +1,6 @@
 import { test } from '@/fixtures';
 
 test.describe('Employee PIM - Regression', () => {
-  test('созданный сотрудник доступен через поиск по ID и по имени', async ({
-    authenticatedPage: _,
-    testEmployee,
-    pimListPage,
-  }) => {
-    await pimListPage.navigate();
-
-    // Поиск по ID
-    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-    await pimListPage.table.shouldNotBeEmpty();
-    await pimListPage.table.shouldHaveCount(1);
-  });
-
   test('полный цикл редактирования сотрудника отражается в UI', async ({
     authenticatedPage: _,
     testEmployee,

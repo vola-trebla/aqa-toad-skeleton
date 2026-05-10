@@ -40,11 +40,4 @@ export abstract class BasePage {
       await locator.click();
     }
   }
-
-  async takeScreenshot(name: string): Promise<Buffer> {
-    return this.page.screenshot({
-      fullPage: true,
-      path: `screenshots/${name}-${Date.now()}.png`,
-    });
-  }
 }
