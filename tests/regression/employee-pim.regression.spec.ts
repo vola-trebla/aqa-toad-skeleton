@@ -1,4 +1,4 @@
-import { test, expect } from '@/fixtures';
+import { test } from '@/fixtures';
 
 test.describe('Employee PIM - Regression', () => {
   test('полный цикл редактирования сотрудника отражается в UI', async ({
@@ -6,12 +6,10 @@ test.describe('Employee PIM - Regression', () => {
     employeeDetailPage,
   }) => {
     await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
-
     await employeeDetailPage.firstNameInput.shouldHaveValue(testEmployee.firstName);
     await employeeDetailPage.lastNameInput.shouldHaveValue(testEmployee.lastName);
 
     await employeeDetailPage.updateName('Regression', 'Updated');
-
     await employeeDetailPage.firstNameInput.shouldHaveValue('Regression');
     await employeeDetailPage.lastNameInput.shouldHaveValue('Updated');
 
@@ -22,16 +20,13 @@ test.describe('Employee PIM - Regression', () => {
   });
 
   test('удалённый сотрудник не появляется в поиске', async ({
-    page,
     testEmployee,
     pimListPage,
     employeeApi,
   }) => {
     await employeeApi.deleteMultiple([testEmployee.empNumber]);
-
     await pimListPage.navigate();
     await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-
-    await expect(page.locator('.oxd-table-card')).toHaveCount(0);
+    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId!);
   });
 });
