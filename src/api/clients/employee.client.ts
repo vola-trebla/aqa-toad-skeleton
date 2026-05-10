@@ -24,13 +24,13 @@ export class EmployeeApiClient {
     return employeeResponseSchema.parse(body).data;
   }
 
-  async delete(empNumber: number): Promise<void> {
+  async deleteMultiple(empNumbers: number[]): Promise<void> {
     const response = await this.request.delete(ApiEndpoints.pim.employees, {
-      data: { ids: [empNumber] },
+      data: { ids: empNumbers },
     });
 
     if (!response.ok()) {
-      throw new Error(`Failed to delete employee ${empNumber}: ${response.status()}`);
+      throw new Error(`Failed to delete employees [${empNumbers}]: ${response.status()}`);
     }
   }
 

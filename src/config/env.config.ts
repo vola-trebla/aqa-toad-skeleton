@@ -6,7 +6,7 @@ dotenv.config();
 const envSchema = z.object({
   BASE_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
   API_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
-  ADMIN_EMAIL: z.string().default('Admin'),
+  ADMIN_USERNAME: z.string().default('Admin'),
   ADMIN_PASSWORD: z.string().default('admin123'),
   ENV: z.enum(['staging', 'production', 'local']).default('staging'),
   CI: z.boolean().default(false),
@@ -20,7 +20,7 @@ const parseEnv = () => {
     return envSchema.parse({
       BASE_URL: process.env.BASE_URL,
       API_URL: process.env.API_URL,
-      ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+      ADMIN_USERNAME: process.env.ADMIN_USERNAME,
       ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
       ENV: process.env.ENV,
       CI: process.env.CI === 'true',

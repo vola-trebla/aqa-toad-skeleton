@@ -2,7 +2,6 @@ import { test, expect } from '@/fixtures';
 
 test.describe('Employee Lifecycle', () => {
   test('созданный через API сотрудник отображается в PIM списке', async ({
-    authenticatedPage: _,
     testEmployee,
     pimListPage,
   }) => {
@@ -12,7 +11,6 @@ test.describe('Employee Lifecycle', () => {
   });
 
   test('можно отредактировать имя сотрудника через UI', async ({
-    authenticatedPage: _,
     testEmployee,
     employeeDetailPage,
   }) => {
@@ -25,7 +23,7 @@ test.describe('Employee Lifecycle', () => {
   });
 
   test('можно удалить сотрудника через UI с подтверждением', async ({
-    authenticatedPage,
+    page,
     testEmployee,
     pimListPage,
   }) => {
@@ -35,7 +33,6 @@ test.describe('Employee Lifecycle', () => {
 
     await pimListPage.deleteFirstResult();
 
-    // После удаления таблица пуста - сотрудник исчез
-    await expect(authenticatedPage.locator('.oxd-table-card')).toHaveCount(0);
+    await expect(page.locator('.oxd-table-card')).toHaveCount(0);
   });
 });

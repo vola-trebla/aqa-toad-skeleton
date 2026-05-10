@@ -1,0 +1,32 @@
+[mcp_servers.github]
+args = [
+    "-y",
+    "@modelcontextprotocol/server-github",
+]
+command = "npx"
+
+[mcp_servers.github.env]
+GITHUB_PERSONAL_ACCESS_TOKEN = "<YOUR_GITHUB_TOKEN>"
+
+[mcp_servers.jira]
+args = [
+    "-y",
+    "@modelcontextprotocol/server-jira",
+]
+command = "npx"
+
+[mcp_servers.jira.env]
+JIRA_API_TOKEN = "<YOUR_JIRA_TOKEN>"
+JIRA_EMAIL = "<YOUR_JIRA_EMAIL>"
+JIRA_URL = "<YOUR_JIRA_URL>"
+
+[mcp_servers.playwright]
+args = [
+    "-y",
+    "@playwright/mcp",
+]
+command = "npx"
+
+[mcp_servers.playwright.env]
+DEBUG = "pw:api"
+npm_config_cache = "./.npm_cache"

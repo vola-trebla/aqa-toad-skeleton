@@ -1,10 +1,7 @@
 import { test, expect } from '@/fixtures';
 
 test.describe('Employee API', () => {
-  test('создание сотрудника возвращает валидную структуру', async ({
-    authenticatedPage: _,
-    testEmployee,
-  }) => {
+  test('создание сотрудника возвращает валидную структуру', async ({ testEmployee }) => {
     expect(testEmployee.empNumber).toBeGreaterThan(0);
     expect(testEmployee.firstName).toBe('Test');
     expect(testEmployee.lastName).toMatch(/^Employee-\d+$/);
@@ -12,7 +9,6 @@ test.describe('Employee API', () => {
   });
 
   test('обновление имени через API отражается в GET запросе', async ({
-    authenticatedPage: _,
     testEmployee,
     employeeApi,
   }) => {
