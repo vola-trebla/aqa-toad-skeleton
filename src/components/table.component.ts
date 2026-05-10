@@ -1,40 +1,47 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { BaseComponent } from '../core/base.component';
+import { UIElement } from '../core/ui-element';
+import { step } from '../core/step';
 
 export class TableComponent extends BaseComponent {
-  constructor(page: Page, containerSelector: string = '[data-testid="data-table"]') {
-    super(page, containerSelector);
-  }
+  readonly rows: UIElement;
+  readonly firstRow: UIElement;
 
-  get rows(): Locator {
-    // Поддержка как стандартных tr, так и кастомных карточек OrangeHRM
-    return this.root.locator('tbody tr, .oxd-table-body .oxd-table-card');
+  constructor(page: Page, containerSelector: string = '.oxd-table') {
+    super(page, containerSelector);
+
+    // Поддержка OrangeHRM (.oxd-table-card) и классики (tr)
+    const rowSelector = 'tbody tr, .oxd-table-body .oxd-table-card';
+    this.rows = this.element(rowSelector, 'Table Rows');
+    this.firstRow = this.element(`${rowSelector}:first-child`, 'First Table Row');
   }
 
   async shouldNotBeEmpty() {
-    await expect(
-      this.rows.first(),
-      'Таблица не должна быть пустой (хотя бы одна строка)'
-    ).toBeVisible();
+    await this.firstRow.shouldBeVisible();
   }
 
   async getRowCount(): Promise<number> {
-    return this.rows.count();
+    return await step('Получение количества строк в таблице', () => this.rows.locator.count());
   }
 
   async getRowByText(text: string): Promise<Locator> {
-    return this.rows.filter({ hasText: text });
+    return this.rows.locator.filter({ hasText: text });
   }
 
   async getCellValue(row: number, column: number): Promise<string> {
-    return this.rows.nth(row).locator('td').nth(column).innerText();
+    // Для OrangeHRM ячейки — это .oxd-table-cell
+    return this.rows.locator.nth(row).locator('.oxd-table-cell, td').nth(column).innerText();
   }
 
   async sortByColumn(columnName: string): Promise<void> {
-    await this.root.locator(`th`, { hasText: columnName }).click();
+    const columnHeader = this.element(
+      `.oxd-table-header [role="columnheader"]:has-text("${columnName}")`,
+      `Column Header: ${columnName}`
+    );
+    await columnHeader.click();
   }
 
   async waitForData(): Promise<void> {
-    await this.rows.first().waitFor({ state: 'visible' });
+    await this.firstRow.shouldBeVisible();
   }
 }
