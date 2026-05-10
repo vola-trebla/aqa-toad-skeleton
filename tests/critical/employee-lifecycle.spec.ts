@@ -1,4 +1,4 @@
-import { test, expect } from '@/fixtures';
+import { test } from '@/fixtures';
 
 test.describe('Employee Lifecycle', () => {
   test('созданный через API сотрудник отображается в PIM списке', async ({
@@ -7,7 +7,7 @@ test.describe('Employee Lifecycle', () => {
   }) => {
     await pimListPage.navigate();
     await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-    await pimListPage.table.shouldNotBeEmpty();
+    await pimListPage.assertEmployeeVisible(testEmployee);
   });
 
   test('можно отредактировать имя сотрудника через UI', async ({
@@ -15,24 +15,19 @@ test.describe('Employee Lifecycle', () => {
     employeeDetailPage,
   }) => {
     await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
-
     await employeeDetailPage.updateName('Updated', 'Name');
-
     await employeeDetailPage.firstNameInput.shouldHaveValue('Updated');
     await employeeDetailPage.lastNameInput.shouldHaveValue('Name');
   });
 
   test('можно удалить сотрудника через UI с подтверждением', async ({
-    page,
     testEmployee,
     pimListPage,
   }) => {
     await pimListPage.navigate();
     await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-    await pimListPage.table.shouldNotBeEmpty();
-
+    await pimListPage.assertEmployeeVisible(testEmployee);
     await pimListPage.deleteFirstResult();
-
-    await expect(page.locator('.oxd-table-card')).toHaveCount(0);
+    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId!);
   });
 });

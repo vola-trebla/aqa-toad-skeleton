@@ -18,16 +18,16 @@ export class LoginPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this._logo = page.locator('.orangehrm-login-branding img');
-    this._usernameInput = page.locator('input[name="username"]');
-    this._passwordInput = page.locator('input[name="password"]');
-    this._loginBtn = page.locator('button[type="submit"]');
+    this._usernameInput = page.getByPlaceholder('Username');
+    this._passwordInput = page.getByPlaceholder('Password');
+    this._loginBtn = page.getByRole('button', { name: 'Login' });
     this._forgotPasswordLink = page.locator('.orangehrm-login-forgot-header');
     this._socialIcons = page.locator('.orangehrm-login-footer-sm a');
     this._copyrightText = page.locator('.orangehrm-copyright-wrapper');
     this._errorMessage = page.locator('.oxd-alert-content-text');
   }
 
-  // Used by auth fixture - fills, submits and waits for dashboard
+  // Used by auth fixture
   async login(username: string, password: string): Promise<void> {
     await this._usernameInput.fill(username);
     await this._passwordInput.fill(password);
@@ -50,11 +50,9 @@ export class LoginPage extends BasePage {
   async assertLoginFormReady(): Promise<void> {
     await step('Проверка формы входа', async () => {
       await expect(this._logo).toBeVisible();
-      await expect(this._usernameInput).toBeVisible();
-      await expect(this._usernameInput).toBeEnabled();
-      await expect(this._passwordInput).toBeVisible();
-      await expect(this._passwordInput).toBeEnabled();
-      await expect(this._loginBtn).toBeVisible();
+      await this.assertUsernameFieldContract();
+      await this.assertPasswordFieldContract();
+      await this.assertLoginButtonContract();
     });
   }
 
@@ -76,5 +74,23 @@ export class LoginPage extends BasePage {
     await step('Проверка сообщения об ошибке', () =>
       expect(this._errorMessage).toContainText('Invalid credentials')
     );
+  }
+
+  // --- Private field contracts ---
+
+  private async assertUsernameFieldContract(): Promise<void> {
+    await expect(this._usernameInput).toBeVisible();
+    await expect(this._usernameInput).toBeEnabled();
+  }
+
+  private async assertPasswordFieldContract(): Promise<void> {
+    await expect(this._passwordInput).toBeVisible();
+    await expect(this._passwordInput).toBeEnabled();
+    await expect(this._passwordInput).toHaveAttribute('type', 'password');
+  }
+
+  private async assertLoginButtonContract(): Promise<void> {
+    await expect(this._loginBtn).toBeVisible();
+    await expect(this._loginBtn).toBeEnabled();
   }
 }

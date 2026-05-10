@@ -7,6 +7,6 @@ test.describe('Employee API fixture - smoke', () => {
   }) => {
     await pimListPage.navigate();
     await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-    await pimListPage.table.shouldNotBeEmpty();
+    await pimListPage.assertEmployeeVisible(testEmployee);
   });
 });
