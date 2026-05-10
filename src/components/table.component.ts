@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { BaseComponent } from '../core/base.component';
 
 export class TableComponent extends BaseComponent {
@@ -9,6 +9,13 @@ export class TableComponent extends BaseComponent {
   get rows(): Locator {
     // Поддержка как стандартных tr, так и кастомных карточек OrangeHRM
     return this.root.locator('tbody tr, .oxd-table-body .oxd-table-card');
+  }
+
+  async shouldNotBeEmpty() {
+    await expect(
+      this.rows.first(),
+      'Таблица не должна быть пустой (хотя бы одна строка)'
+    ).toBeVisible();
   }
 
   async getRowCount(): Promise<number> {
