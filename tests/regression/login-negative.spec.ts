@@ -7,22 +7,14 @@ test.describe('Login - Negative Scenarios', () => {
 
   test('неверный пароль показывает сообщение об ошибке', async ({ loginPage }) => {
     await loginPage.navigate();
-    await loginPage.usernameInput.fill(config.ADMIN_USERNAME);
-    await loginPage.passwordInput.fill('wrong_password_123');
-    await loginPage.loginBtn.click();
-
-    await loginPage.errorMessage.shouldBeVisible();
-    await loginPage.errorMessage.shouldContainText('Invalid credentials');
+    await loginPage.loginWithCredentials(config.ADMIN_USERNAME, 'wrong_password_123');
+    await loginPage.assertInvalidCredentialsShown();
   });
 
   test('несуществующий пользователь показывает сообщение об ошибке', async ({ loginPage }) => {
     await loginPage.navigate();
-    await loginPage.usernameInput.fill('nonexistent_user_xyz');
-    await loginPage.passwordInput.fill('any_password');
-    await loginPage.loginBtn.click();
-
-    await loginPage.errorMessage.shouldBeVisible();
-    await loginPage.errorMessage.shouldContainText('Invalid credentials');
+    await loginPage.loginWithCredentials('nonexistent_user_xyz', 'any_password');
+    await loginPage.assertInvalidCredentialsShown();
   });
 
   test('API возвращает 401 при неверных credentials', async ({ request }) => {
