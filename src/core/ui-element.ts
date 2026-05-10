@@ -47,6 +47,12 @@ export class UIElement {
     ).toContainText(text);
   }
 
+  async shouldHaveText(text: string | RegExp) {
+    await expect(this.locator, `Элемент "${this.name}" должен иметь текст "${text}"`).toHaveText(
+      text
+    );
+  }
+
   async shouldHaveCount(count: number) {
     await expect(
       this.locator,

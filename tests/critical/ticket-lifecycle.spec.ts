@@ -1,4 +1,4 @@
-import { test, expect } from '../../src/fixtures';
+import { test } from '../../src/fixtures';
 import { TicketDetailPage } from '../../src/pages/tickets/ticket-detail.page';
 
 test.describe('Ticket Lifecycle — state machine', () => {
@@ -10,17 +10,21 @@ test.describe('Ticket Lifecycle — state machine', () => {
 
     await authenticatedPage.goto(`/tickets/${testTicket.id}`);
 
+    // New → Assigned
     await ticketPage.changeStatus('Assigned');
-    expect(await ticketPage.getStatus()).toBe('Assigned');
+    await ticketPage.status.shouldHaveText('Assigned');
 
+    // Assigned → In Progress
     await ticketPage.changeStatus('In Progress');
-    expect(await ticketPage.getStatus()).toBe('In Progress');
+    await ticketPage.status.shouldHaveText('In Progress');
 
+    // In Progress → Resolved
     await ticketPage.changeStatus('Resolved');
-    expect(await ticketPage.getStatus()).toBe('Resolved');
+    await ticketPage.status.shouldHaveText('Resolved');
 
+    // Resolved → Closed
     await ticketPage.changeStatus('Closed');
-    expect(await ticketPage.getStatus()).toBe('Closed');
+    await ticketPage.status.shouldHaveText('Closed');
   });
 
   test('нельзя закрыть тикет без резолюции', async ({ authenticatedPage, testTicket }) => {
@@ -28,10 +32,10 @@ test.describe('Ticket Lifecycle — state machine', () => {
 
     await authenticatedPage.goto(`/tickets/${testTicket.id}`);
 
-    // Пытаемся перескочить статусы (предположим, что UI не дает, но мы проверяем логику)
+    // Пытаемся перескочить статусы
     await ticketPage.changeStatus('Closed');
 
-    // Ожидаем что статус НЕ изменился (в реальном приложении тут была бы ошибка или статус остался New)
-    expect(await ticketPage.getStatus()).toBe('New');
+    // Ожидаем что статус НЕ изменился
+    await ticketPage.status.shouldHaveText('New');
   });
 });
