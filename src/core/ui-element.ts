@@ -60,7 +60,18 @@ export class UIElement {
     ).toHaveCount(count);
   }
 
+  async shouldHaveCountGreaterThan(count: number) {
+    await expect(async () => {
+      const actualCount = await this.locator.count();
+      expect(
+        actualCount,
+        `Количество элементов "${this.name}" должно быть больше ${count}, но было ${actualCount}`
+      ).toBeGreaterThan(count);
+    }, `Ожидание, что количество элементов "${this.name}" станет больше ${count}`).toPass();
+  }
+
   // Прокси для основных действий
+
   async click() {
     await this.locator.click();
   }
