@@ -19,3 +19,4 @@ allure-report/
 .playwright-mcp/
 .auth/
 plan.md
+situation.md
