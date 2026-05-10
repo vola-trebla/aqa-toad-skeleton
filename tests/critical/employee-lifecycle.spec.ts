@@ -14,10 +14,9 @@ test.describe('Employee Lifecycle', () => {
     testEmployee,
     employeeDetailPage,
   }) => {
-    await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
-    await employeeDetailPage.updateName('Updated', 'Name');
-    await employeeDetailPage.firstNameInput.shouldHaveValue('Updated');
-    await employeeDetailPage.lastNameInput.shouldHaveValue('Name');
+    await employeeDetailPage.openEmployee(testEmployee.empNumber);
+    await employeeDetailPage.updateName(testEmployee.empNumber, 'Updated', 'Name');
+    await employeeDetailPage.assertName('Updated', 'Name');
   });
 
   test('можно удалить сотрудника через UI с подтверждением', async ({

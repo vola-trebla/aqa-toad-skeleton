@@ -5,18 +5,15 @@ test.describe('Employee PIM - Regression', () => {
     testEmployee,
     employeeDetailPage,
   }) => {
-    await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
-    await employeeDetailPage.firstNameInput.shouldHaveValue(testEmployee.firstName);
-    await employeeDetailPage.lastNameInput.shouldHaveValue(testEmployee.lastName);
+    await employeeDetailPage.openEmployee(testEmployee.empNumber);
+    await employeeDetailPage.assertName(testEmployee.firstName, testEmployee.lastName);
 
-    await employeeDetailPage.updateName('Regression', 'Updated');
-    await employeeDetailPage.firstNameInput.shouldHaveValue('Regression');
-    await employeeDetailPage.lastNameInput.shouldHaveValue('Updated');
+    await employeeDetailPage.updateName(testEmployee.empNumber, 'Regression', 'Updated');
+    await employeeDetailPage.assertName('Regression', 'Updated');
 
     // Повторная навигация - убеждаемся что сохранилось
-    await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
-    await employeeDetailPage.firstNameInput.shouldHaveValue('Regression');
-    await employeeDetailPage.lastNameInput.shouldHaveValue('Updated');
+    await employeeDetailPage.openEmployee(testEmployee.empNumber);
+    await employeeDetailPage.assertName('Regression', 'Updated');
   });
 
   test('удалённый сотрудник не появляется в поиске', async ({

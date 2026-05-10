@@ -1,7 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { config } from './src/config/env.config';
 
 export default defineConfig({
   testDir: './tests',
@@ -16,7 +14,7 @@ export default defineConfig({
     ['./src/reporters/slack.reporter.ts'],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    baseURL: config.BASE_URL,
     headless: process.env.HEADLESS !== 'false', // По умолчанию headless, если HEADLESS=false — будет headed
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -43,7 +41,7 @@ export default defineConfig({
     {
       name: 'api',
       testMatch: /tests\/api\/.*/,
-      use: { baseURL: process.env.API_URL },
+      use: { baseURL: config.API_URL },
     },
   ],
 });

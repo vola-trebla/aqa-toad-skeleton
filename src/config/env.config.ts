@@ -6,8 +6,8 @@ dotenv.config();
 const envSchema = z.object({
   BASE_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
   API_URL: z.string().url().default('https://opensource-demo.orangehrmlive.com'),
-  ADMIN_USERNAME: z.string().default('Admin'),
-  ADMIN_PASSWORD: z.string().default('admin123'),
+  ADMIN_USERNAME: z.string().min(1),
+  ADMIN_PASSWORD: z.string().min(1),
   ENV: z.enum(['staging', 'production', 'local']).default('staging'),
   CI: z.boolean().default(false),
   SLACK_WEBHOOK: z.string().url().optional(),
@@ -24,7 +24,7 @@ const parseEnv = () => {
       ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
       ENV: process.env.ENV,
       CI: process.env.CI === 'true',
-      SLACK_WEBHOOK: process.env.SLACK_WEBHOOK,
+      SLACK_WEBHOOK: process.env.SLACK_WEBHOOK || undefined,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

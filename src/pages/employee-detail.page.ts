@@ -1,54 +1,51 @@
-import { Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { BasePage } from '@/core/base.page';
-import { UIElement } from '@/core/ui-element';
 import { config } from '@/config/env.config';
 import { Routes } from '@/constants/routes';
 import { ApiEndpoints } from '@/constants/api-endpoints';
+import { step } from '@/core/step';
 
 export class EmployeeDetailPage extends BasePage {
   readonly url = Routes.pim.list;
 
-  private empNumber: number = 0;
-
-  readonly firstNameInput: UIElement;
-  readonly middleNameInput: UIElement;
-  readonly lastNameInput: UIElement;
-  readonly employeeIdInput: UIElement;
-  readonly saveBtn: UIElement;
+  private readonly _firstNameInput: Locator;
+  private readonly _lastNameInput: Locator;
+  private readonly _saveBtn: Locator;
 
   constructor(page: Page) {
     super(page);
-
-    this.firstNameInput = this.element('input[name="firstName"]', 'First Name Input');
-    this.middleNameInput = this.element('input[name="middleName"]', 'Middle Name Input');
-    this.lastNameInput = this.element('input[name="lastName"]', 'Last Name Input');
-    this.employeeIdInput = this.element(
-      '.oxd-input-group:has-text("Employee Id") input',
-      'Employee Id Input'
-    );
-    this.saveBtn = this.element(
-      '.oxd-form:has(input[name="firstName"]) button[type="submit"]',
-      'Save Button'
-    );
+    this._firstNameInput = page.locator('input[name="firstName"]');
+    this._lastNameInput = page.locator('input[name="lastName"]');
+    this._saveBtn = page.locator('.oxd-form:has(input[name="firstName"]) button[type="submit"]');
   }
 
-  override navigate(): never {
-    throw new Error('EmployeeDetailPage requires empNumber - use navigateToEmployee(empNumber)');
+  // --- Domain actions ---
+
+  async openEmployee(empNumber: number): Promise<void> {
+    await step(`Открытие карточки сотрудника #${empNumber}`, async () => {
+      await this.page.goto(`${config.BASE_URL}${Routes.pim.personalDetails(empNumber)}`);
+      await expect(this._firstNameInput).toBeVisible();
+    });
   }
 
-  async navigateToEmployee(empNumber: number): Promise<void> {
-    this.empNumber = empNumber;
-    await this.page.goto(`${config.BASE_URL}${Routes.pim.personalDetails(empNumber)}`);
-    await this.firstNameInput.shouldBeVisible();
+  async updateName(empNumber: number, first: string, last: string): Promise<void> {
+    await step(`Обновление имени на "${first} ${last}"`, async () => {
+      await this._firstNameInput.fill(first);
+      await this._lastNameInput.fill(last);
+      const waitForSave = this.page.waitForResponse(
+        (r) => r.url().includes(ApiEndpoints.pim.personalDetails(empNumber)) && r.ok()
+      );
+      await this._saveBtn.click();
+      await waitForSave;
+    });
   }
 
-  async updateName(first: string, last: string): Promise<void> {
-    await this.firstNameInput.fill(first);
-    await this.lastNameInput.fill(last);
-    const waitForSave = this.page.waitForResponse(
-      (r) => r.url().includes(ApiEndpoints.pim.personalDetails(this.empNumber)) && r.ok()
-    );
-    await this.saveBtn.click();
-    await waitForSave;
+  // --- Domain assertions ---
+
+  async assertName(firstName: string, lastName: string): Promise<void> {
+    await step(`Проверка имени: "${firstName} ${lastName}"`, async () => {
+      await expect(this._firstNameInput).toHaveValue(firstName);
+      await expect(this._lastNameInput).toHaveValue(lastName);
+    });
   }
 }
