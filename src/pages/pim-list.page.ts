@@ -4,6 +4,7 @@ import { TableComponent } from '@/components/table.component';
 import { ModalComponent } from '@/components/modal.component';
 import { UIElement } from '@/core/ui-element';
 import { Routes } from '@/constants/routes';
+import { ApiEndpoints } from '@/constants/api-endpoints';
 
 export class PIMListPage extends BasePage {
   readonly url = Routes.pim.list;
@@ -28,9 +29,12 @@ export class PIMListPage extends BasePage {
   }
 
   async searchEmployeeById(id: string): Promise<void> {
+    const waitForResults = this.page.waitForResponse(
+      (r) => r.url().includes(ApiEndpoints.pim.employees) && r.ok()
+    );
     await this.employeeIdInput.fill(id);
     await this.searchBtn.click();
-    await this.page.waitForLoadState('networkidle');
+    await waitForResults;
   }
 
   async deleteFirstResult(): Promise<void> {
