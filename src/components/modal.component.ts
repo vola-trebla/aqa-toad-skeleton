@@ -4,27 +4,29 @@ import { UIElement } from '../core/ui-element';
 
 export class ModalComponent extends BaseComponent {
   readonly title: UIElement;
-  readonly closeBtn: UIElement;
   readonly confirmBtn: UIElement;
+  readonly cancelBtn: UIElement;
 
-  constructor(page: Page, selector: string = '[data-testid="modal"]') {
+  // OrangeHRM uses role="dialog" for all modal dialogs
+  constructor(page: Page, selector: string = '[role="dialog"]') {
     super(page, selector);
 
-    this.title = this.element('[data-testid="modal-title"]', 'Modal Title');
-    this.closeBtn = this.element('[data-testid="modal-close"]', 'Modal Close Button');
-    this.confirmBtn = this.element('[data-testid="modal-confirm"]', 'Modal Confirm Button');
-  }
-
-  async close(): Promise<void> {
-    await this.closeBtn.click();
-    await this.waitForHidden();
+    this.title = this.element('.oxd-dialog-title', 'Modal Title');
+    this.confirmBtn = this.element('button.oxd-button--label-danger', 'Confirm Button');
+    this.cancelBtn = this.element('button.oxd-button--text', 'Cancel Button');
   }
 
   async confirm(): Promise<void> {
     await this.confirmBtn.click();
+    await this.waitForHidden();
+  }
+
+  async cancel(): Promise<void> {
+    await this.cancelBtn.click();
+    await this.waitForHidden();
   }
 
   async getTitle(): Promise<string> {
-    return await this.title.locator.innerText();
+    return this.title.locator.innerText();
   }
 }

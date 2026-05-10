@@ -17,3 +17,5 @@ allure-report/
 
 # Playwright MCP artifacts
 .playwright-mcp/
+.auth/
+plan.md
