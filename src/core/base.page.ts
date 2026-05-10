@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, test } from '@playwright/test';
 import { config } from '../config/env.config';
 import { UIElement } from './ui-element';
 
@@ -13,8 +13,10 @@ export abstract class BasePage {
   }
 
   async navigate(): Promise<void> {
-    await this.page.goto(`${config.BASE_URL}${this.url}`);
-    await this.waitForPageLoad();
+    await test.step(`Переход на страницу: ${this.url}`, async () => {
+      await this.page.goto(`${config.BASE_URL}${this.url}`);
+      await this.waitForPageLoad();
+    });
   }
 
   protected async waitForPageLoad(): Promise<void> {
