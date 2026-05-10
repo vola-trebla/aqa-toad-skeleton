@@ -1,8 +1,8 @@
-import { test, expect } from '../../src/fixtures';
+import { test } from '../../src/fixtures';
 
 test.describe('Employee API fixture - smoke', () => {
   test('создаёт сотрудника через API и находит его в списке', async ({
-    authenticatedPage,
+    authenticatedPage: _,
     testEmployee,
     pimListPage,
   }) => {

@@ -2,7 +2,7 @@ import { test, expect } from '../../src/fixtures';
 
 test.describe('Employee Lifecycle', () => {
   test('созданный через API сотрудник отображается в PIM списке', async ({
-    authenticatedPage,
+    authenticatedPage: _,
     testEmployee,
     pimListPage,
   }) => {
@@ -12,7 +12,7 @@ test.describe('Employee Lifecycle', () => {
   });
 
   test('можно отредактировать имя сотрудника через UI', async ({
-    authenticatedPage,
+    authenticatedPage: _,
     testEmployee,
     employeeDetailPage,
     employeeApi,
