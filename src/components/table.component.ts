@@ -1,5 +1,6 @@
-import { Locator, Page, expect, test } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { BaseComponent } from '../core/base.component';
+import { step } from '../core/step';
 
 export class TableComponent extends BaseComponent {
   constructor(page: Page, containerSelector: string = '[data-testid="data-table"]') {
@@ -12,18 +13,13 @@ export class TableComponent extends BaseComponent {
   }
 
   async shouldNotBeEmpty() {
-    await test.step('Проверка, что таблица не пустая', async () => {
-      await expect(
-        this.rows.first(),
-        'Таблица не должна быть пустой (хотя бы одна строка)'
-      ).toBeVisible();
-    });
+    await step('Проверка, что таблица не пустая', () =>
+      expect(this.rows.first(), 'Таблица не должна быть пустой (хотя бы одна строка)').toBeVisible()
+    );
   }
 
   async getRowCount(): Promise<number> {
-    return await test.step('Получение количества строк в таблице', async () => {
-      return this.rows.count();
-    });
+    return await step('Получение количества строк в таблице', () => this.rows.count());
   }
 
   async getRowByText(text: string): Promise<Locator> {
