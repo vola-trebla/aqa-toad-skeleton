@@ -18,11 +18,12 @@ This file defines the foundational identity and workflows for the AQA-TOAD-SKELE
 
 ## 📋 Operational Workflows & Golden Rules
 
-1. **Branch & PR Policy**: **NEVER push directly to `main`**. All changes must go through a feature branch (`feat/`, `fix/`, `chore/`) and a Pull Request.
-2. **Commit Hygiene**: Husky + lint-staged will automatically run Prettier. Ensure all lint/type checks pass before pushing.
-3. **Security First**: Never hardcode credentials. Use `.env` (ignored by git) and validate via `src/config/env.config.ts`.
-4. **Atomic Tests**: Each test must be independent. Use fixtures for auth bypass and data management.
-5. **No Em Dash**: Use ASCII hyphen `-` in prose and docs.
+1. **Git Toad Manifesto**: Strictly follow the [Git Toad Manifesto](.claude/rules/git-toad-manifesto.md) for all repository operations.
+2. **Branch & PR Policy**: **NEVER push directly to `main`**. All changes must go through a feature branch and a Pull Request.
+3. **Commit Hygiene**: Husky + lint-staged will automatically run Prettier. Ensure all lint/type checks pass before pushing.
+4. **Security First**: Never hardcode credentials. Use `.env` (ignored by git) and validate via `src/config/env.config.ts`.
+5. **Atomic Tests**: Each test must be independent. Use fixtures for auth bypass and data management.
+6. **No Em Dash**: Use ASCII hyphen `-` in prose and docs.
 
 ---
 
