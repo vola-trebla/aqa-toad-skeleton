@@ -6,6 +6,7 @@ import { config } from '../config/env.config';
 import { EmployeeApiClient } from '../api/clients/employee.client';
 import { EmployeeBuilder } from '../helpers/builders/employee.builder';
 import type { EmployeeResponse } from '../api/schemas/employee.schema';
+import { Routes } from '../constants/routes';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -68,7 +69,7 @@ export const test = base.extend<UserFixtures, WorkerFixtures>({
   authenticatedPage: async ({ page, workerStorageState }, use) => {
     const { cookies } = JSON.parse(fs.readFileSync(workerStorageState, 'utf-8'));
     await page.context().addCookies(cookies);
-    await page.goto(`${config.BASE_URL}/web/index.php/dashboard/index`);
+    await page.goto(`${config.BASE_URL}${Routes.dashboard.index}`);
     await use(page);
   },
 

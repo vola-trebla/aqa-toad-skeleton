@@ -43,6 +43,6 @@ test.describe('OrangeHRM - Login Page UI Verification', () => {
 
   test('копирайт в футере должен содержать актуальную информацию', async ({ loginPage }) => {
     await loginPage.copyrightText.shouldBeVisible();
-    await loginPage.copyrightText.shouldContainText('OrangeHRM OS 5.7');
+    await loginPage.copyrightText.shouldContainText('OrangeHRM OS 5.8');
   });
 });

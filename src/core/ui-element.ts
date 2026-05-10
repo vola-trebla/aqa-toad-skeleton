@@ -88,6 +88,14 @@ export class UIElement {
     );
   }
 
+  async shouldHaveValue(value: string | RegExp) {
+    await step(`Проверка значения "${value}" у элемента "${this.name}"`, () =>
+      expect(this.locator, `Элемент "${this.name}" должен иметь значение "${value}"`).toHaveValue(
+        value
+      )
+    );
+  }
+
   // Прокси для основных действий
   async click() {
     await step(`Клик по элементу "${this.name}"`, () => this.locator.click());

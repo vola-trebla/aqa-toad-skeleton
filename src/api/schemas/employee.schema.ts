@@ -5,7 +5,7 @@ export const employeeSchema = z.object({
   firstName: z.string(),
   middleName: z.string(),
   lastName: z.string(),
-  employeeId: z.string(),
+  employeeId: z.string().nullable(),
   terminationDate: z.string().nullish(),
 });
 

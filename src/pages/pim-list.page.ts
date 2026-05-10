@@ -3,9 +3,10 @@ import { BasePage } from '../core/base.page';
 import { TableComponent } from '../components/table.component';
 import { ModalComponent } from '../components/modal.component';
 import { UIElement } from '../core/ui-element';
+import { Routes } from '../constants/routes';
 
 export class PIMListPage extends BasePage {
-  readonly url = '/web/index.php/pim/viewEmployeeList';
+  readonly url = Routes.pim.list;
   readonly table: TableComponent;
   readonly deleteModal: ModalComponent;
 

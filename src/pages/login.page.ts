@@ -1,9 +1,10 @@
 import { Page } from '@playwright/test';
 import { BasePage } from '../core/base.page';
 import { UIElement } from '../core/ui-element';
+import { Routes } from '../constants/routes';
 
 export class LoginPage extends BasePage {
-  readonly url = '/web/index.php/auth/login';
+  readonly url = Routes.auth.login;
 
   // Элементы как UIElement
   readonly logo: UIElement;

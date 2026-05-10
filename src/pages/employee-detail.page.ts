@@ -2,9 +2,10 @@ import { Page } from '@playwright/test';
 import { BasePage } from '../core/base.page';
 import { UIElement } from '../core/ui-element';
 import { config } from '../config/env.config';
+import { Routes } from '../constants/routes';
 
 export class EmployeeDetailPage extends BasePage {
-  readonly url = '/web/index.php/pim/viewPersonalDetails';
+  readonly url = Routes.pim.list;
 
   readonly firstNameInput: UIElement;
   readonly middleNameInput: UIElement;
@@ -30,9 +31,7 @@ export class EmployeeDetailPage extends BasePage {
   }
 
   async navigateToEmployee(empNumber: number): Promise<void> {
-    await this.page.goto(
-      `${config.BASE_URL}/web/index.php/pim/viewPersonalDetails/empNumber/${empNumber}`
-    );
+    await this.page.goto(`${config.BASE_URL}${Routes.pim.personalDetails(empNumber)}`);
     await this.page.waitForLoadState('networkidle');
   }
 

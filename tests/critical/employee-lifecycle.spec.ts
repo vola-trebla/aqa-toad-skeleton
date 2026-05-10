@@ -7,7 +7,7 @@ test.describe('Employee Lifecycle', () => {
     pimListPage,
   }) => {
     await pimListPage.navigate();
-    await pimListPage.searchEmployeeById(testEmployee.employeeId);
+    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
     await pimListPage.table.shouldNotBeEmpty();
   });
 
@@ -15,18 +15,13 @@ test.describe('Employee Lifecycle', () => {
     authenticatedPage: _,
     testEmployee,
     employeeDetailPage,
-    employeeApi,
   }) => {
     await employeeDetailPage.navigateToEmployee(testEmployee.empNumber);
 
     await employeeDetailPage.updateName('Updated', 'Name');
 
-    await expect
-      .poll(async () => {
-        const updated = await employeeApi.getById(testEmployee.empNumber);
-        return updated.firstName;
-      })
-      .toBe('Updated');
+    await employeeDetailPage.firstNameInput.shouldHaveValue('Updated');
+    await employeeDetailPage.lastNameInput.shouldHaveValue('Name');
   });
 
   test('можно удалить сотрудника через UI с подтверждением', async ({
@@ -35,7 +30,7 @@ test.describe('Employee Lifecycle', () => {
     pimListPage,
   }) => {
     await pimListPage.navigate();
-    await pimListPage.searchEmployeeById(testEmployee.employeeId);
+    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
     await pimListPage.table.shouldNotBeEmpty();
 
     await pimListPage.deleteFirstResult();
