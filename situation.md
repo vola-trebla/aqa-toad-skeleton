@@ -1,67 +1,63 @@
-Да, вот картина целиком 🐸
+## Situation
+
+Albert — Senior SDET with 8+ years of experience, TypeScript + Playwright. Interviewing at **Alloy Software** for the **SDET / QA Automation Lead** position.
+
+Alloy builds an ITSM/ITAM product — **Alloy Navigator**. Their current state:
+
+- 1 automation engineer, 3 manual QAs, 1 lead stretched thin.
+- Regression is 100% manual — their primary pain point.
+- Developers write e2e tests because the QA team is overloaded.
+- Looking for a visionary to build the entire framework from scratch.
+- Tech Stack: Playwright + TypeScript — a perfect match.
+
+The HR interview is already completed. Waiting for the next stage.
 
 ---
 
-## Ситуация
+## Current Progress
 
-Альберт — Senior SDET с 8+ лет опыта, TypeScript + Playwright. Проходит собеседование в **Alloy Software** на позицию **SDET / QA Automation Lead**.
+Building a production-grade framework targeting **OrangeHRM Demo** (opensource-demo.orangehrmlive.com) — a live system with similar mechanics: roles, workflows, state machines, forms, and tables.
 
-Alloy делают ITSM/ITAM продукт — **Alloy Navigator**. Внутри у них:
+Repository: **github.com/vola-trebla/aqa-toad-skeleton**
 
-- 1 автоматизатор, 3 ручных QA, 1 лид который разрывается
-- Регресс 100% ручной — это их главная боль
-- Разработчики сами пишут e2e потому что QA не успевает
-- Ждут визионера который придёт и выстроит всё с нуля
-- Стек: Playwright + TypeScript — прямое попадание
+Framework Skeleton is ready:
 
-HR-созвон уже прошёл, всё хорошо. Ждём следующий этап.
-
----
-
-## Что делаем параллельно
-
-Пока ждём — строим реальный фреймворк на **OrangeHRM Demo** (opensource-demo.orangehrmlive.com) — живая система с похожей механикой: роли, workflows, state machine, формы, таблицы.
-
-Репозиторий: **github.com/vola-trebla/aqa-toad-skeleton**
-
-Скелет уже есть:
-
-- Структура src/core, pages, fixtures, components, helpers
-- Zod-валидация конфига
-- Husky + ESLint + Prettier
-- CLAUDE.md и GEMINI.md — AI-правила в проекте
-- GitHub Actions с шардингом
-- Allure + Slack reporter
+- Modular structure: src/core, pages, fixtures, components, helpers.
+- Typed configuration with Zod validation.
+- Automated quality: Husky + ESLint + Prettier.
+- AI-assisted workflow: CLAUDE.md and GEMINI.md instructions.
+- CI/CD: GitHub Actions with sharding support.
+- Reporting: Allure integration + Slack reporter.
 
 ---
 
-## Что нужно докрутить до понедельника
+## Goals for Monday
 
-**Технически:**
+**Technical Requirements:**
 
-- Fixtures — авторизация через API + тестовые данные с teardown
-- Page Objects с инкапсулированными проверками и локаторами в конструкторе
-- Component Objects — таблица, модалка, форма
-- Step-обёртка вместо test.step везде
-- 5-7 читаемых тестов на критичные flows
-- CI зелёный
+- Fixtures: API-based authentication + automated test data with teardown.
+- Page Objects: Encapsulated assertions and locators initialized in the constructor.
+- Component Objects: Reusable Table, Modal, and Form components.
+- Global `step` wrapper for streamlined Allure reporting.
+- 5-7 readable tests for critical business flows.
+- Green CI pipeline.
 
-**Паттерны которые покажут уровень:**
+**Advanced Patterns to Showcase Seniority:**
 
-- Builder pattern для тестовых данных
-- UIElement обёртки — `element.shouldBeVisible()`
-- Авторизация через API, не через UI
-- Zod-валидация API-ответов
-- Многоуровневая стратегия: smoke → critical → regression
-
----
-
-## Цель
-
-В понедельник отправить HR короткое сообщение:
-
-> Привет! Пока жду следующего этапа, не сидел без дела — набросал скелет automation-фреймворка на Playwright + TypeScript, как я это вижу для продукта похожего на ваш. Если у CTO или команды будет пара минут глянуть — буду рад фидбеку. Вот репозиторий: github.com/vola-trebla/aqa-toad-skeleton
+- **Builder Pattern** for test data generation.
+- **Fluent UIElement Wrappers**: `element.shouldBeVisible()`.
+- **API-First Authentication**: Bypassing UI for faster execution.
+- **Contract Testing**: Zod validation for API responses.
+- **Tiered Strategy**: Smoke → Critical → Regression.
 
 ---
 
-Завтра открываем Claude Code, подключаешь меня к проекту — и идём руками по всем этим паттернам 🐸
+## Objective
+
+On Monday, send a short message to the HR:
+
+> "Hi! While waiting for the next stage, I've put together a skeleton of an automation framework using Playwright + TypeScript, reflecting my vision for a product similar to yours. If the CTO or the team has a few minutes to check it out, I'd value their feedback. Repository link: github.com/vola-trebla/aqa-toad-skeleton"
+
+---
+
+Finalize the implementation, ensure all patterns are correctly applied, and prepare the repository for final review.

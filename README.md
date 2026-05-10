@@ -73,4 +73,4 @@ project-root/
 
 ---
 
-_Stay green, stay froggy. 🐸_
+_Stay professional, stay focused._

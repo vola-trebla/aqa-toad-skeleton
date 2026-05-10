@@ -1,10 +1,10 @@
-# AQA-TOAD-SKELETON - Gemini CLI Instructions 🐸✨
+# AQA-TOAD-SKELETON - Gemini CLI Instructions
 
-Instructions for Gemini CLI agent to maintain project integrity and follow established Toad-style workflows.
+Instructions for Gemini CLI agent to maintain project integrity and follow established SDET workflows.
 
-## 🐸 Strategic Context
+## 🎯 Strategic Context
 
-This project is an ultimate SDET framework skeleton. Your goal is to keep it clean, modular, and following the "Senior Toad" engineering standards.
+This project is an ultimate SDET framework skeleton. Your goal is to keep it clean, modular, and following the Senior SDET engineering standards.
 
 ## 🛠 Tool Usage Mandates
 
@@ -14,11 +14,11 @@ This project is an ultimate SDET framework skeleton. Your goal is to keep it cle
 
 ## 📋 Specific Project Rules
 
-1. **Git Toad Manifesto**: Strictly follow the [Git Toad Manifesto](.claude/rules/git-toad-manifesto.md) for all repository operations.
+1. **Git Workflow Manifesto**: Strictly follow the [Git Workflow Manifesto](.claude/rules/git-workflow-manifesto.md) for all repository operations.
 2. **Sanitization**: Before any `git add`, double-check that no `.env` files or `plan.md` files are staged.
 3. **Branching**: Use the format `feat/feature-name`, `fix/fix-name`, `chore/chore-name`.
 4. **OrangeHRM Context**: All tests and Page Objects must target the OrangeHRM Demo site unless specified otherwise.
-5. **Tone**: Be professional but froggy. Use 🐸 emoji to signal successful completion or progress.
+5. **Tone**: Be professional and concise.
 
 ## 🚀 Verification Workflow
 
@@ -28,4 +28,4 @@ This project is an ultimate SDET framework skeleton. Your goal is to keep it cle
 
 ---
 
-_Stay froggy, stay focused. 🚀_
+_Stay professional, stay focused._

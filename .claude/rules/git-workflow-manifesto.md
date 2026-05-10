@@ -1,30 +1,29 @@
-# 📜 Git Toad Manifesto 🐸
+# 📜 Git Workflow Manifesto
 
-Rules for managing the AQA-TOAD-SKELETON repository to ensure engineering excellence and "froggy" order.
+Rules for managing the AQA-TOAD-SKELETON repository to ensure engineering excellence and professional order.
 
-## 1. Sacred Waters (Main Branch Protection)
+## 1. Protected Waters (Main Branch Protection)
 
 - **NEVER** push directly to `main`. It is a protected sanctuary.
 - All changes must be reviewed and merged via Pull Requests.
 
-## 2. Personal Lily Pads (Feature Branching)
+## 2. Feature Branching
 
 - Every task must have its own branch.
 - Use naming conventions: `feat/feature-name`, `fix/bug-fix`, `chore/task-name`.
 
-## 3. Clean Paws (Sanitization)
+## 3. Sanitization
 
 - Before `git add .`, double-check for sensitive files.
 - Ensure `.env`, `plan.md`, and `.auth/` artifacts are **NEVER** tracked.
 - Use `.gitignore` as your primary shield. 🛡️
 
-## 4. Toad Marks (Commit Hygiene)
+## 4. Commit Hygiene
 
 - Commit messages must be clear, concise, and professional.
-- **Mandatory**: Every commit message must include the 🐸 emoji.
 - Use `git commit -m "..."` to avoid interactive editors.
 
-## 5. Order in the Reeds (Cleanup)
+## 5. Cleanup
 
 - Delete local and remote feature branches immediately after a successful merge.
 - Keep the workspace free of unused artifacts.
@@ -36,4 +35,4 @@ Rules for managing the AQA-TOAD-SKELETON repository to ensure engineering excell
 
 ---
 
-_Stay green, stay froggy. 🐸_
+_Stay professional, stay focused._
