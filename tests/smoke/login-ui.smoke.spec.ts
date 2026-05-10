@@ -1,6 +1,8 @@
-import { test } from '@/fixtures';
+import { test, expect } from '@/fixtures';
 
 test.describe('OrangeHRM - Login Page UI Verification', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ loginPage }) => {
     await loginPage.navigate();
   });
@@ -24,12 +26,9 @@ test.describe('OrangeHRM - Login Page UI Verification', () => {
     await loginPage.passwordInput.shouldHaveAttribute('placeholder', 'Password');
   });
 
-  test('кнопка Login должна быть видимой и иметь правильный цвет (Orange)', async ({
-    loginPage,
-  }) => {
+  test('кнопка Login должна соответствовать визуальному снимку', async ({ loginPage }) => {
     await loginPage.loginBtn.shouldBeVisible();
-    await loginPage.loginBtn.shouldHaveCSS('background-color', 'rgb(255, 123, 29)');
-    await loginPage.loginBtn.shouldHaveCSS('color', 'rgb(255, 255, 255)');
+    await expect(loginPage.loginBtn.locator).toHaveScreenshot('login-button.png');
   });
 
   test('ссылка Forgot your password? должна быть кликабельной', async ({ loginPage }) => {

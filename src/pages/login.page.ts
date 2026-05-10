@@ -14,10 +14,10 @@ export class LoginPage extends BasePage {
   readonly forgotPasswordLink: UIElement;
   readonly socialIcons: UIElement;
   readonly copyrightText: UIElement;
+  readonly errorMessage: UIElement;
 
   constructor(page: Page) {
     super(page);
-    // Использование хелпера element()
     this.logo = this.element('.orangehrm-login-branding img', 'Logo');
     this.usernameInput = this.element('input[name="username"]', 'Username Input');
     this.passwordInput = this.element('input[name="password"]', 'Password Input', { secret: true });
@@ -28,6 +28,7 @@ export class LoginPage extends BasePage {
     );
     this.socialIcons = this.element('.orangehrm-login-footer-sm a', 'Social Icons');
     this.copyrightText = this.element('.orangehrm-copyright-wrapper', 'Copyright Text');
+    this.errorMessage = this.element('.oxd-alert-content-text', 'Login Error Message');
   }
 
   async login(username: string, password: string): Promise<void> {
