@@ -1,23 +1,11 @@
 import { Page } from '@playwright/test';
-import { config } from '@/config/env.config';
-import { UIElement } from './ui-element';
-import { step } from './step';
 
+/**
+ * Minimal base for all Page Objects. Provides page reference and load helpers.
+ * Pages with a static route extend StaticRoutePage instead.
+ */
 export abstract class BasePage {
   constructor(protected readonly page: Page) {}
-
-  abstract readonly url: string;
-
-  protected element(selector: string, name: string, options?: { secret?: boolean }): UIElement {
-    return new UIElement(this.page.locator(selector), name, options);
-  }
-
-  async navigate(): Promise<void> {
-    await step(`Переход на страницу: ${this.url}`, async () => {
-      await this.page.goto(`${config.BASE_URL}${this.url}`);
-      await this.waitForPageLoad();
-    });
-  }
 
   protected async waitForPageLoad(): Promise<void> {
     await this.page.waitForLoadState('domcontentloaded');

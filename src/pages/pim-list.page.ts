@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { BasePage } from '@/core/base.page';
+import { StaticRoutePage } from '@/core/static-route.page';
 import { OrangeTable } from '@/components/orange-table.component';
 import { OrangeConfirmModal } from '@/components/orange-confirm-modal.component';
 import { Routes } from '@/constants/routes';
@@ -8,7 +8,7 @@ import { PIMLabels } from '@/constants/pim';
 import { step } from '@/core/step';
 import type { EmployeeResponse } from '@/api/schemas/employee.schema';
 
-export class PIMListPage extends BasePage {
+export class PIMListPage extends StaticRoutePage {
   readonly url = Routes.pim.list;
 
   private readonly table: OrangeTable;
@@ -65,6 +65,12 @@ export class PIMListPage extends BasePage {
       await expect(row).toContainText(employee.firstName);
       await expect(row).toContainText(employee.lastName);
     });
+  }
+
+  async assertEmployeeVisibleById(employeeId: string): Promise<void> {
+    await step(`Проверка наличия строки с ID ${employeeId} в таблице`, () =>
+      expect(this.employeeRowById(employeeId)).toBeVisible()
+    );
   }
 
   async assertEmployeeAbsent(employeeId: string): Promise<void> {

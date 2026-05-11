@@ -1,11 +1,11 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { BasePage } from '@/core/base.page';
+import { StaticRoutePage } from '@/core/static-route.page';
 import { Routes } from '@/constants/routes';
 import { LoginLabels } from '@/constants/login';
 import { LoginMessages, AppMessages } from '@/constants/messages';
 import { step } from '@/core/step';
 
-export class LoginPage extends BasePage {
+export class LoginPage extends StaticRoutePage {
   readonly url = Routes.auth.login;
 
   private readonly _logo: Locator;

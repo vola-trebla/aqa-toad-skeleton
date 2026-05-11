@@ -5,10 +5,11 @@ test.describe(
   'OrangeHRM - Employee Management (PIM)',
   { tag: [TestTags.smoke, TestTags.pim] },
   () => {
-    test('должен искать сотрудника по ID', async ({ pimListPage }) => {
+    test('поиск сотрудника по ID находит конкретного сотрудника', async ({ pimListPage }) => {
+      const seedEmployeeId = '0001';
       await pimListPage.navigate();
-      await pimListPage.searchEmployeeById('0001');
-      await pimListPage.assertSearchHasResults();
+      await pimListPage.searchEmployeeById(seedEmployeeId);
+      await pimListPage.assertEmployeeVisibleById(seedEmployeeId);
     });
   }
 );

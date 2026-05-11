@@ -1,5 +1,4 @@
 import { Locator, Page } from '@playwright/test';
-import { UIElement } from './ui-element';
 
 export abstract class BaseComponent {
   protected readonly root: Locator;
@@ -9,11 +8,6 @@ export abstract class BaseComponent {
     selector: string
   ) {
     this.root = page.locator(selector);
-  }
-
-  // Хелпер для создания обернутых элементов внутри компонента
-  protected element(selector: string, name: string): UIElement {
-    return new UIElement(this.root.locator(selector), name);
   }
 
   async isVisible(): Promise<boolean> {
