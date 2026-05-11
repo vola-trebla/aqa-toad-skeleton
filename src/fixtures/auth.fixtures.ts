@@ -13,60 +13,70 @@ export type AuthWorkerFixtures = {
 };
 
 /**
- * Auth-only base test. Acquires session cookies via HTTP form login - no browser.
- * Role-aware storage state path supports multi-role expansion without rewrite.
+ * Factory that creates a role-scoped auth test base.
+ * Each role gets its own storage-state file so parallel suites
+ * with different roles do not clobber each other.
+ *
+ * @example
+ *   export const adminTest  = createAuthTest('admin');
+ *   export const managerTest = createAuthTest('manager');
  */
-export const authTest = base.extend<object, AuthWorkerFixtures>({
-  workerStorageState: [
-    async ({ playwright }, use, workerInfo) => {
-      const role: Role = Roles.admin;
-      const storageStatePath = path.join('.auth', `${role}-worker-${workerInfo.workerIndex}.json`);
-      await fs.promises.mkdir(path.dirname(storageStatePath), { recursive: true });
-
-      const apiContext = await playwright.request.newContext({
-        baseURL: config.BASE_URL,
-        ignoreHTTPSErrors: true,
-      });
-
-      // 1. GET login page - acquires CSRF cookie and embedded token
-      const loginPageResponse = await apiContext.get(Routes.auth.login);
-      const html = await loginPageResponse.text();
-      const tokenMatch = html.match(TOKEN_REGEX);
-      const csrfToken = tokenMatch?.[1];
-      if (!csrfToken) {
-        throw new Error('CSRF token not found on OrangeHRM login page - markup may have changed');
-      }
-
-      // 2. POST credentials - session cookie is persisted in context.
-      // OrangeHRM responds 302: success → /dashboard, failure → /auth/login.
-      const validateResponse = await apiContext.post(Routes.auth.validate, {
-        form: {
-          _token: csrfToken,
-          username: config.ADMIN_USERNAME,
-          password: config.ADMIN_PASSWORD,
-        },
-        maxRedirects: 0,
-      });
-
-      const location = validateResponse.headers()['location'] ?? '';
-      const status = validateResponse.status();
-      const looksLikeSuccess =
-        (status === 302 || status === 303) && !location.includes(Routes.auth.login);
-      if (!looksLikeSuccess) {
-        throw new Error(
-          `Auth failed for role "${role}": HTTP ${status}, Location="${location}". ` +
-            `Check ADMIN_USERNAME/ADMIN_PASSWORD for ${config.BASE_URL}.`
+export function createAuthTest(role: Role) {
+  return base.extend<object, AuthWorkerFixtures>({
+    workerStorageState: [
+      async ({ playwright }, use, workerInfo) => {
+        const storageStatePath = path.join(
+          '.auth',
+          `${role}-worker-${workerInfo.workerIndex}.json`
         );
-      }
+        await fs.promises.mkdir(path.dirname(storageStatePath), { recursive: true });
 
-      await apiContext.storageState({ path: storageStatePath });
-      await apiContext.dispose();
+        const apiContext = await playwright.request.newContext({
+          baseURL: config.BASE_URL,
+          ignoreHTTPSErrors: true,
+        });
 
-      await use(storageStatePath);
-    },
-    { scope: 'worker' },
-  ],
+        // 1. GET login page - acquires CSRF cookie and embedded token
+        const loginPageResponse = await apiContext.get(Routes.auth.login);
+        const html = await loginPageResponse.text();
+        const csrfToken = html.match(TOKEN_REGEX)?.[1];
+        if (!csrfToken) {
+          throw new Error('CSRF token not found on OrangeHRM login page - markup may have changed');
+        }
 
-  // Override Playwright's built-in storageState - every page/request is authenticated
-  storageState: ({ workerStorageState }, use) => use(workerStorageState),
-});
+        // 2. POST credentials - session cookie is persisted in context.
+        // OrangeHRM responds 302: success → /dashboard, failure → /auth/login.
+        const validateResponse = await apiContext.post(Routes.auth.validate, {
+          form: {
+            _token: csrfToken,
+            username: config.ADMIN_USERNAME,
+            password: config.ADMIN_PASSWORD,
+          },
+          maxRedirects: 0,
+        });
+
+        const location = validateResponse.headers()['location'] ?? '';
+        const status = validateResponse.status();
+        const looksLikeSuccess =
+          (status === 302 || status === 303) && !location.includes(Routes.auth.login);
+        if (!looksLikeSuccess) {
+          throw new Error(
+            `Auth failed for role "${role}": HTTP ${status}, Location="${location}". ` +
+              `Check ADMIN_USERNAME/ADMIN_PASSWORD for ${config.BASE_URL}.`
+          );
+        }
+
+        await apiContext.storageState({ path: storageStatePath });
+        await apiContext.dispose();
+
+        await use(storageStatePath);
+      },
+      { scope: 'worker' },
+    ],
+
+    // Override Playwright's built-in storageState - every page/request is authenticated
+    storageState: ({ workerStorageState }, use) => use(workerStorageState),
+  });
+}
+
+export const authTest = createAuthTest(Roles.admin);

@@ -1,33 +1,37 @@
 import { authTest } from './auth.fixtures';
-import { EmployeeApiClient } from '@/api/clients/employee.client';
 import { EmployeeBuilder } from '@/helpers/builders/employee.builder';
 import { ApiError } from '@/api/api-error';
+import { createApiRegistry, ApiRegistry } from '@/api/registry';
 import type { CreatedEmployee } from '@/api/schemas/employee.schema';
 
 export type CreateEmployeeFn = (builder?: EmployeeBuilder) => Promise<CreatedEmployee>;
 
 export type ApiFixtures = {
-  employeeApi: EmployeeApiClient;
+  api: ApiRegistry;
   createEmployee: CreateEmployeeFn;
   testEmployee: CreatedEmployee;
 };
 
 /**
- * API test - extends auth fixtures with API clients and test data.
- * Uses Playwright's built-in `request` fixture (no browser page needed for actual test work).
+ * API test - extends auth fixtures with the API registry and test data.
+ * Uses Playwright's built-in `request` fixture (no browser page needed).
+ *
+ * Access all domain clients via `api`:
+ *   api.employee.create(...)
+ *   api.employee.getById(...)
  */
 export const apiTest = authTest.extend<ApiFixtures>({
-  employeeApi: async ({ request }, use) => use(new EmployeeApiClient(request)),
+  api: async ({ request }, use) => use(createApiRegistry(request)),
 
   /**
    * Factory for creating employees. Tracks every created entity and best-effort
    * deletes them after the test. Tests that delete entities themselves can do so
-   * freely - cleanup ignores per-id failures.
+   * freely - cleanup ignores 404 per-id failures.
    */
-  createEmployee: async ({ employeeApi }, use) => {
+  createEmployee: async ({ api }, use) => {
     const created: number[] = [];
     const factory: CreateEmployeeFn = async (builder = new EmployeeBuilder()) => {
-      const employee = await employeeApi.create(builder.build());
+      const employee = await api.employee.create(builder.build());
       created.push(employee.empNumber);
       return employee;
     };
@@ -36,7 +40,7 @@ export const apiTest = authTest.extend<ApiFixtures>({
 
     if (created.length === 0) return;
     try {
-      await employeeApi.deleteMultiple(created);
+      await api.employee.deleteMultiple(created);
     } catch (err) {
       // 404 means the test under verification already deleted these entities - expected.
       if (err instanceof ApiError && err.status === 404) return;
