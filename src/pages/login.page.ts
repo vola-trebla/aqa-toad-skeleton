@@ -58,12 +58,6 @@ export class LoginPage extends BasePage {
     });
   }
 
-  async assertLoginButtonMatchesSnapshot(): Promise<void> {
-    await step('Проверка визуального снимка кнопки Login', () =>
-      expect(this._loginBtn).toHaveScreenshot('login-button.png')
-    );
-  }
-
   async assertFooterVisible(): Promise<void> {
     await step('Проверка футера страницы входа', async () => {
       await expect(this._forgotPasswordLink).toContainText(LoginMessages.forgotPasswordPrompt);

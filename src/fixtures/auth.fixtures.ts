@@ -3,6 +3,7 @@ import { LoginPage } from '@/pages/login.page';
 import { config } from '@/config/env.config';
 import { Roles, Role } from '@/constants/roles';
 import * as path from 'path';
+import * as fs from 'fs';
 
 export type AuthWorkerFixtures = {
   workerStorageState: string;
@@ -17,8 +18,9 @@ export const authTest = base.extend<object, AuthWorkerFixtures>({
     async ({ browser }, use, workerInfo) => {
       const role: Role = Roles.admin;
       const storageStatePath = path.join('.auth', `${role}-worker-${workerInfo.workerIndex}.json`);
+      await fs.promises.mkdir(path.dirname(storageStatePath), { recursive: true });
 
-      const context = await browser.newContext();
+      const context = await browser.newContext({ ignoreHTTPSErrors: true });
       const page = await context.newPage();
 
       const loginPage = new LoginPage(page);

@@ -23,7 +23,11 @@ export class EmployeeDetailPage extends BasePage {
 
   async openEmployee(empNumber: number): Promise<void> {
     await step(`Открытие карточки сотрудника #${empNumber}`, async () => {
+      const waitForLoad = this.page.waitForResponse(
+        (r) => r.url().includes(ApiEndpoints.pim.personalDetails(empNumber)) && r.ok()
+      );
       await this.page.goto(`${config.BASE_URL}${Routes.pim.personalDetails(empNumber)}`);
+      await waitForLoad;
       await expect(this._firstNameInput).toBeVisible();
     });
   }

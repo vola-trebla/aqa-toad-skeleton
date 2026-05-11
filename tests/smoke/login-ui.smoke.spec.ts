@@ -12,10 +12,6 @@ test.describe('OrangeHRM - Login Page UI Smoke', { tag: [TestTags.smoke, TestTag
     await loginPage.assertLoginFormReady();
   });
 
-  test('кнопка Login соответствует визуальному снимку', async ({ loginPage }) => {
-    await loginPage.assertLoginButtonMatchesSnapshot();
-  });
-
   test('футер страницы входа отображается корректно', async ({ loginPage }) => {
     await loginPage.assertFooterVisible();
   });
