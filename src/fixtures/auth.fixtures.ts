@@ -20,7 +20,7 @@ export const authTest = base.extend<object, AuthWorkerFixtures>({
       const storageStatePath = path.join('.auth', `${role}-worker-${workerInfo.workerIndex}.json`);
       await fs.promises.mkdir(path.dirname(storageStatePath), { recursive: true });
 
-      const context = await browser.newContext();
+      const context = await browser.newContext({ ignoreHTTPSErrors: true });
       const page = await context.newPage();
 
       const loginPage = new LoginPage(page);
