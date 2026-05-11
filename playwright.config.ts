@@ -1,21 +1,32 @@
 import { defineConfig, devices } from '@playwright/test';
 import { config } from './src/config/env.config';
 
+const isCI = !!process.env.CI;
+
 export default defineConfig({
   testDir: './tests',
   timeout: 30_000,
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 4 : undefined,
-  reporter: [
-    ['html', { open: 'never' }],
-    ['allure-playwright'],
-    ['./src/reporters/slack.reporter.ts'],
-  ],
+  forbidOnly: isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 4 : undefined,
+  reporter: isCI
+    ? [
+        ['list'],
+        ['github'],
+        ['html', { open: 'never' }],
+        ['allure-playwright'],
+        ['./src/reporters/slack.reporter.ts'],
+      ]
+    : [
+        ['list'],
+        ['html', { open: 'never' }],
+        ['allure-playwright'],
+        ['./src/reporters/slack.reporter.ts'],
+      ],
   use: {
     baseURL: config.BASE_URL,
-    headless: process.env.HEADLESS !== 'false', // По умолчанию headless, если HEADLESS=false — будет headed
+    headless: process.env.HEADLESS !== 'false',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
