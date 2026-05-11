@@ -6,26 +6,26 @@ import { Routes } from '@/constants/routes';
 import { ApiEndpoints } from '@/constants/api-endpoints';
 import { PIMLabels } from '@/constants/pim';
 import { step } from '@/core/step';
-import type { EmployeeResponse } from '@/api/schemas/employee.schema';
+import type { CreatedEmployee } from '@/api/schemas/employee.schema';
 
 export class PIMListPage extends StaticRoutePage {
   readonly url = Routes.pim.list;
 
   private readonly table: OrangeTable;
   private readonly deleteModal: OrangeConfirmModal;
-  private readonly _employeeIdInput: Locator;
-  private readonly _searchBtn: Locator;
-  private readonly _tableCards: Locator;
+  private readonly employeeIdInput: Locator;
+  private readonly searchBtn: Locator;
+  private readonly tableCards: Locator;
 
   constructor(page: Page) {
     super(page);
     this.table = new OrangeTable(page, '.oxd-table');
     this.deleteModal = new OrangeConfirmModal(page);
-    this._employeeIdInput = page
+    this.employeeIdInput = page
       .locator('form .oxd-input-group', { hasText: PIMLabels.employeeId })
       .locator('input');
-    this._searchBtn = page.getByRole('button', { name: PIMLabels.search });
-    this._tableCards = page.locator('.oxd-table-body .oxd-table-card');
+    this.searchBtn = page.getByRole('button', { name: PIMLabels.search });
+    this.tableCards = page.locator('.oxd-table-body .oxd-table-card');
   }
 
   // --- Domain actions ---
@@ -35,8 +35,8 @@ export class PIMListPage extends StaticRoutePage {
       const waitForResults = this.page.waitForResponse(
         (r) => r.url().includes(ApiEndpoints.pim.employees) && r.ok()
       );
-      await this._employeeIdInput.fill(id);
-      await this._searchBtn.click();
+      await this.employeeIdInput.fill(id);
+      await this.searchBtn.click();
       await waitForResults;
     });
   }
@@ -53,14 +53,13 @@ export class PIMListPage extends StaticRoutePage {
 
   async assertSearchHasResults(): Promise<void> {
     await step('Проверка наличия результатов поиска', () =>
-      expect(this._tableCards.first()).toBeVisible()
+      expect(this.tableCards.first()).toBeVisible()
     );
   }
 
-  async assertEmployeeVisible(employee: EmployeeResponse): Promise<void> {
-    const employeeId = employee.employeeId!;
-    await step(`Проверка наличия сотрудника ${employeeId} в таблице`, async () => {
-      const row = this.employeeRowById(employeeId);
+  async assertEmployeeVisible(employee: CreatedEmployee): Promise<void> {
+    await step(`Проверка наличия сотрудника ${employee.employeeId} в таблице`, async () => {
+      const row = this.employeeRowById(employee.employeeId);
       await expect(row).toBeVisible();
       await expect(row).toContainText(employee.firstName);
       await expect(row).toContainText(employee.lastName);
@@ -82,6 +81,6 @@ export class PIMListPage extends StaticRoutePage {
   // --- Private helpers ---
 
   private employeeRowById(employeeId: string): Locator {
-    return this._tableCards.filter({ hasText: employeeId });
+    return this.tableCards.filter({ hasText: employeeId });
   }
 }

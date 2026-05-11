@@ -37,14 +37,27 @@ export const authTest = base.extend<object, AuthWorkerFixtures>({
       }
       const csrfToken = tokenMatch[1];
 
-      // 2. POST credentials - session cookie is persisted in context
-      await apiContext.post(Routes.auth.validate, {
+      // 2. POST credentials - session cookie is persisted in context.
+      // OrangeHRM responds 302: success → /dashboard, failure → /auth/login.
+      const validateResponse = await apiContext.post(Routes.auth.validate, {
         form: {
           _token: csrfToken,
           username: config.ADMIN_USERNAME,
           password: config.ADMIN_PASSWORD,
         },
+        maxRedirects: 0,
       });
+
+      const location = validateResponse.headers()['location'] ?? '';
+      const status = validateResponse.status();
+      const looksLikeSuccess =
+        (status === 302 || status === 303) && !location.includes(Routes.auth.login);
+      if (!looksLikeSuccess) {
+        throw new Error(
+          `Auth failed for role "${role}": HTTP ${status}, Location="${location}". ` +
+            `Check ADMIN_USERNAME/ADMIN_PASSWORD for ${config.BASE_URL}.`
+        );
+      }
 
       await apiContext.storageState({ path: storageStatePath });
       await apiContext.dispose();

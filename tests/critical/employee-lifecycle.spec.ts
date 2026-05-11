@@ -7,7 +7,7 @@ test.describe('Employee Lifecycle', { tag: [TestTags.critical, TestTags.pim] }, 
     pimListPage,
   }) => {
     await pimListPage.navigate();
-    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
+    await pimListPage.searchEmployeeById(testEmployee.employeeId);
     await pimListPage.assertEmployeeVisible(testEmployee);
   });
 
@@ -25,9 +25,9 @@ test.describe('Employee Lifecycle', { tag: [TestTags.critical, TestTags.pim] }, 
     pimListPage,
   }) => {
     await pimListPage.navigate();
-    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
+    await pimListPage.searchEmployeeById(testEmployee.employeeId);
     await pimListPage.assertEmployeeVisible(testEmployee);
-    await pimListPage.deleteEmployeeById(testEmployee.employeeId!);
-    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId!);
+    await pimListPage.deleteEmployeeById(testEmployee.employeeId);
+    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId);
   });
 });

@@ -1,21 +1,18 @@
-import { APIRequestContext } from '@playwright/test';
 import {
   Employee,
+  CreatedEmployee,
   CreateEmployeeRequest,
   UpdateEmployeeNameRequest,
   employeeResponseEnvelopeSchema,
+  createdEmployeeEnvelopeSchema,
 } from '@/api/schemas/employee.schema';
 import { ApiEndpoints } from '@/constants/api-endpoints';
 import { BaseApiClient } from './base.client';
 
 export class EmployeeApiClient extends BaseApiClient {
-  constructor(request: APIRequestContext) {
-    super(request);
-  }
-
-  async create(request: CreateEmployeeRequest): Promise<Employee> {
+  async create(request: CreateEmployeeRequest): Promise<CreatedEmployee> {
     const response = await this.request.post(ApiEndpoints.pim.employees, { data: request });
-    return this.parseResponse(response, employeeResponseEnvelopeSchema);
+    return this.parseResponse(response, createdEmployeeEnvelopeSchema);
   }
 
   async deleteMultiple(empNumbers: number[]): Promise<void> {
@@ -23,7 +20,10 @@ export class EmployeeApiClient extends BaseApiClient {
       data: { ids: empNumbers },
     });
     if (!response.ok()) {
-      throw new Error(`Failed to delete employees [${empNumbers}]: ${response.status()}`);
+      const body = await response.text().catch(() => '<no body>');
+      throw new Error(
+        `Failed to delete employees [${empNumbers.join(',')}]: HTTP ${response.status()} - ${body}`
+      );
     }
   }
 

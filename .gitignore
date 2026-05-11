@@ -10,6 +10,7 @@ videos/
 .npm_cache
 .claude/settings.local.json
 plan.md
+REVIEW.md
 
 # Allure artifacts
 allure-results/
@@ -18,5 +19,4 @@ allure-report/
 # Playwright MCP artifacts
 .playwright-mcp/
 .auth/
-plan.md
 situation.md

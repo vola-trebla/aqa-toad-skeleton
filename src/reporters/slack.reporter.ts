@@ -1,4 +1,4 @@
-import type { Reporter, FullResult, TestCase, TestResult } from '@playwright/test/reporter';
+import type { Reporter, FullResult, TestCase } from '@playwright/test/reporter';
 
 interface SlackBlock {
   type: string;
@@ -7,33 +7,10 @@ interface SlackBlock {
 }
 
 class SlackReporter implements Reporter {
-  private passed = 0;
-  private failed = 0;
-  private flaky = 0;
-  private skipped = 0;
-  private failures: string[] = [];
+  private readonly seen = new Set<TestCase>();
 
-  onTestEnd(test: TestCase, result: TestResult): void {
-    const isFinalAttempt = result.retry === test.retries;
-    switch (result.status) {
-      case 'passed':
-        if (result.retry > 0 && isFinalAttempt) {
-          this.flaky++;
-        } else if (isFinalAttempt) {
-          this.passed++;
-        }
-        break;
-      case 'failed':
-      case 'timedOut':
-        if (isFinalAttempt) {
-          this.failed++;
-          this.failures.push(`❌ ${test.parent.title} > ${test.title}`);
-        }
-        break;
-      case 'skipped':
-        this.skipped++;
-        break;
-    }
+  onTestEnd(test: TestCase): void {
+    this.seen.add(test);
   }
 
   async onEnd(result: FullResult): Promise<void> {
@@ -43,8 +20,32 @@ class SlackReporter implements Reporter {
       return;
     }
 
-    const emoji = this.failed === 0 ? '✅' : '🔴';
-    const status = this.failed === 0 ? 'PASSED' : 'FAILED';
+    let passed = 0;
+    let failed = 0;
+    let flaky = 0;
+    let skipped = 0;
+    const failures: string[] = [];
+
+    for (const test of this.seen) {
+      switch (test.outcome()) {
+        case 'expected':
+          passed++;
+          break;
+        case 'flaky':
+          flaky++;
+          break;
+        case 'unexpected':
+          failed++;
+          failures.push(`❌ ${test.parent.title} > ${test.title}`);
+          break;
+        case 'skipped':
+          skipped++;
+          break;
+      }
+    }
+
+    const emoji = failed === 0 ? '✅' : '🔴';
+    const status = failed === 0 ? 'PASSED' : 'FAILED';
     const runLink = this.buildGithubRunLink();
 
     const blocks: SlackBlock[] = [
@@ -55,10 +56,10 @@ class SlackReporter implements Reporter {
       {
         type: 'section',
         fields: [
-          { type: 'mrkdwn', text: `*Passed:* ${this.passed}` },
-          { type: 'mrkdwn', text: `*Failed:* ${this.failed}` },
-          { type: 'mrkdwn', text: `*Flaky:* ${this.flaky}` },
-          { type: 'mrkdwn', text: `*Skipped:* ${this.skipped}` },
+          { type: 'mrkdwn', text: `*Passed:* ${passed}` },
+          { type: 'mrkdwn', text: `*Failed:* ${failed}` },
+          { type: 'mrkdwn', text: `*Flaky:* ${flaky}` },
+          { type: 'mrkdwn', text: `*Skipped:* ${skipped}` },
           { type: 'mrkdwn', text: `*Duration:* ${Math.round(result.duration / 1000)}s` },
         ],
       },
@@ -71,12 +72,12 @@ class SlackReporter implements Reporter {
       });
     }
 
-    if (this.failures.length > 0) {
+    if (failures.length > 0) {
       blocks.push({
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Failures (first 10):*\n${this.failures.slice(0, 10).join('\n')}`,
+          text: `*Failures (first 10):*\n${failures.slice(0, 10).join('\n')}`,
         },
       });
     }

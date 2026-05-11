@@ -10,7 +10,7 @@ test.describe(
       pimListPage,
     }) => {
       await pimListPage.navigate();
-      await pimListPage.searchEmployeeById(testEmployee.employeeId!);
+      await pimListPage.searchEmployeeById(testEmployee.employeeId);
       await pimListPage.assertEmployeeVisible(testEmployee);
     });
   }

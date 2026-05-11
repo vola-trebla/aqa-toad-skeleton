@@ -12,8 +12,11 @@ export const employeeSchema = z.object({
 });
 export type Employee = z.infer<typeof employeeSchema>;
 
-// Backwards-compatible alias
-export type EmployeeResponse = Employee;
+// Employee returned by create/update flows - employeeId always present
+export const createdEmployeeSchema = employeeSchema.extend({
+  employeeId: z.string(),
+});
+export type CreatedEmployee = z.infer<typeof createdEmployeeSchema>;
 
 // --- Response envelopes ---
 
@@ -21,6 +24,10 @@ export const employeeResponseEnvelopeSchema = z.object({
   data: employeeSchema,
 });
 export type EmployeeResponseEnvelope = z.infer<typeof employeeResponseEnvelopeSchema>;
+
+export const createdEmployeeEnvelopeSchema = z.object({
+  data: createdEmployeeSchema,
+});
 
 // --- Request payloads ---
 

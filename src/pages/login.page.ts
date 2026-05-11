@@ -8,28 +8,28 @@ import { step } from '@/core/step';
 export class LoginPage extends StaticRoutePage {
   readonly url = Routes.auth.login;
 
-  private readonly _logo: Locator;
-  private readonly _usernameInput: Locator;
-  private readonly _passwordInput: Locator;
-  private readonly _loginBtn: Locator;
-  private readonly _errorMessage: Locator;
+  private readonly logo: Locator;
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginBtn: Locator;
+  private readonly errorMessage: Locator;
 
   constructor(page: Page) {
     super(page);
-    this._logo = page.locator('.orangehrm-login-branding img');
-    this._usernameInput = page.getByPlaceholder(LoginLabels.username);
-    this._passwordInput = page.getByPlaceholder(LoginLabels.password);
-    this._loginBtn = page.getByRole('button', { name: LoginLabels.loginButton });
-    this._errorMessage = page.locator('.oxd-alert-content-text');
+    this.logo = page.locator('.orangehrm-login-branding img');
+    this.usernameInput = page.getByPlaceholder(LoginLabels.username);
+    this.passwordInput = page.getByPlaceholder(LoginLabels.password);
+    this.loginBtn = page.getByRole('button', { name: LoginLabels.loginButton });
+    this.errorMessage = page.locator('.oxd-alert-content-text');
   }
 
   // --- Domain actions ---
 
   async loginWithCredentials(username: string, password: string): Promise<void> {
     await step('Попытка входа с credentials', async () => {
-      await this._usernameInput.fill(username);
-      await this._passwordInput.fill(password);
-      await this._loginBtn.click();
+      await this.usernameInput.fill(username);
+      await this.passwordInput.fill(password);
+      await this.loginBtn.click();
     });
   }
 
@@ -37,7 +37,7 @@ export class LoginPage extends StaticRoutePage {
 
   async assertLoginFormReady(): Promise<void> {
     await step('Проверка формы входа', async () => {
-      await expect(this._logo).toBeVisible();
+      await expect(this.logo).toBeVisible();
       await this.assertUsernameFieldContract();
       await this.assertPasswordFieldContract();
       await this.assertLoginButtonContract();
@@ -46,25 +46,25 @@ export class LoginPage extends StaticRoutePage {
 
   async assertInvalidCredentialsShown(): Promise<void> {
     await step('Проверка сообщения об ошибке', () =>
-      expect(this._errorMessage).toContainText(LoginMessages.invalidCredentials)
+      expect(this.errorMessage).toContainText(LoginMessages.invalidCredentials)
     );
   }
 
   // --- Private field contracts ---
 
   private async assertUsernameFieldContract(): Promise<void> {
-    await expect(this._usernameInput).toBeVisible();
-    await expect(this._usernameInput).toBeEnabled();
+    await expect(this.usernameInput).toBeVisible();
+    await expect(this.usernameInput).toBeEnabled();
   }
 
   private async assertPasswordFieldContract(): Promise<void> {
-    await expect(this._passwordInput).toBeVisible();
-    await expect(this._passwordInput).toBeEnabled();
-    await expect(this._passwordInput).toHaveAttribute('type', 'password');
+    await expect(this.passwordInput).toBeVisible();
+    await expect(this.passwordInput).toBeEnabled();
+    await expect(this.passwordInput).toHaveAttribute('type', 'password');
   }
 
   private async assertLoginButtonContract(): Promise<void> {
-    await expect(this._loginBtn).toBeVisible();
-    await expect(this._loginBtn).toBeEnabled();
+    await expect(this.loginBtn).toBeVisible();
+    await expect(this.loginBtn).toBeEnabled();
   }
 }

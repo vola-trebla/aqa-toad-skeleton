@@ -24,7 +24,7 @@ test.describe('Employee PIM - Regression', { tag: [TestTags.regression, TestTags
   }) => {
     await employeeApi.deleteMultiple([testEmployee.empNumber]);
     await pimListPage.navigate();
-    await pimListPage.searchEmployeeById(testEmployee.employeeId!);
-    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId!);
+    await pimListPage.searchEmployeeById(testEmployee.employeeId);
+    await pimListPage.assertEmployeeAbsent(testEmployee.employeeId);
   });
 });

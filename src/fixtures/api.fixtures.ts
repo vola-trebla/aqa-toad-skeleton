@@ -1,11 +1,14 @@
 import { authTest } from './auth.fixtures';
 import { EmployeeApiClient } from '@/api/clients/employee.client';
 import { EmployeeBuilder } from '@/helpers/builders/employee.builder';
-import type { Employee } from '@/api/schemas/employee.schema';
+import type { CreatedEmployee } from '@/api/schemas/employee.schema';
+
+export type CreateEmployeeFn = (builder?: EmployeeBuilder) => Promise<CreatedEmployee>;
 
 export type ApiFixtures = {
   employeeApi: EmployeeApiClient;
-  testEmployee: Employee;
+  createEmployee: CreateEmployeeFn;
+  testEmployee: CreatedEmployee;
 };
 
 /**
@@ -15,17 +18,41 @@ export type ApiFixtures = {
 export const apiTest = authTest.extend<ApiFixtures>({
   employeeApi: async ({ request }, use) => use(new EmployeeApiClient(request)),
 
-  testEmployee: async ({ employeeApi }, use) => {
-    const employeeRequest = new EmployeeBuilder().build();
-    const created = await employeeApi.create(employeeRequest);
+  /**
+   * Factory for creating employees. Tracks every created entity and best-effort
+   * deletes them after the test. Tests that delete entities themselves can do so
+   * freely - cleanup ignores per-id failures.
+   */
+  createEmployee: async ({ employeeApi }, use) => {
+    const created: number[] = [];
+    const factory: CreateEmployeeFn = async (builder = new EmployeeBuilder()) => {
+      const employee = await employeeApi.create(builder.build());
+      created.push(employee.empNumber);
+      return employee;
+    };
 
-    await use(created);
+    await use(factory);
 
+    if (created.length === 0) return;
     try {
-      await employeeApi.deleteMultiple([created.empNumber]);
+      await employeeApi.deleteMultiple(created);
     } catch (err) {
-      // Visible cleanup failure - do not swallow silently
-      console.error(`[testEmployee cleanup] failed to delete employee #${created.empNumber}:`, err);
+      // 404 means the test under verification already deleted these entities - expected.
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes('HTTP 404')) return;
+      console.warn(
+        `[createEmployee cleanup] best-effort delete of [${created.join(',')}] failed:`,
+        message
+      );
     }
+  },
+
+  /**
+   * Convenience: single default employee. Use `createEmployee` directly when you
+   * need multiple entities or a custom builder.
+   */
+  testEmployee: async ({ createEmployee }, use) => {
+    const employee = await createEmployee();
+    await use(employee);
   },
 });
