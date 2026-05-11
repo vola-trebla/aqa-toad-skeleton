@@ -39,9 +39,9 @@ export const createEmployeeRequestSchema = z.object({
 });
 export type CreateEmployeeRequest = z.infer<typeof createEmployeeRequestSchema>;
 
-export const updateEmployeeNameRequestSchema = z.object({
-  firstName: z.string().min(1),
-  middleName: z.string(),
-  lastName: z.string().min(1),
+export const updateEmployeeNameRequestSchema = createEmployeeRequestSchema.pick({
+  firstName: true,
+  middleName: true,
+  lastName: true,
 });
 export type UpdateEmployeeNameRequest = z.infer<typeof updateEmployeeNameRequestSchema>;

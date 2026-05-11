@@ -7,6 +7,7 @@ import {
   createdEmployeeEnvelopeSchema,
 } from '@/api/schemas/employee.schema';
 import { ApiEndpoints } from '@/constants/api-endpoints';
+import { ApiError } from '@/api/api-error';
 import { BaseApiClient } from './base.client';
 
 export class EmployeeApiClient extends BaseApiClient {
@@ -20,10 +21,8 @@ export class EmployeeApiClient extends BaseApiClient {
       data: { ids: empNumbers },
     });
     if (!response.ok()) {
-      const body = await response.text().catch(() => '<no body>');
-      throw new Error(
-        `Failed to delete employees [${empNumbers.join(',')}]: HTTP ${response.status()} - ${body}`
-      );
+      const body = await response.text().catch(() => '<unreadable body>');
+      throw new ApiError(response.status(), response.url(), body);
     }
   }
 

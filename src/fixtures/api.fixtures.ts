@@ -1,6 +1,7 @@
 import { authTest } from './auth.fixtures';
 import { EmployeeApiClient } from '@/api/clients/employee.client';
 import { EmployeeBuilder } from '@/helpers/builders/employee.builder';
+import { ApiError } from '@/api/api-error';
 import type { CreatedEmployee } from '@/api/schemas/employee.schema';
 
 export type CreateEmployeeFn = (builder?: EmployeeBuilder) => Promise<CreatedEmployee>;
@@ -38,11 +39,10 @@ export const apiTest = authTest.extend<ApiFixtures>({
       await employeeApi.deleteMultiple(created);
     } catch (err) {
       // 404 means the test under verification already deleted these entities - expected.
-      const message = err instanceof Error ? err.message : String(err);
-      if (message.includes('HTTP 404')) return;
+      if (err instanceof ApiError && err.status === 404) return;
       console.warn(
         `[createEmployee cleanup] best-effort delete of [${created.join(',')}] failed:`,
-        message
+        err instanceof Error ? err.message : err
       );
     }
   },

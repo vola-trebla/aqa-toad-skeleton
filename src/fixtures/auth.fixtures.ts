@@ -32,10 +32,10 @@ export const authTest = base.extend<object, AuthWorkerFixtures>({
       const loginPageResponse = await apiContext.get(Routes.auth.login);
       const html = await loginPageResponse.text();
       const tokenMatch = html.match(TOKEN_REGEX);
-      if (!tokenMatch) {
+      const csrfToken = tokenMatch?.[1];
+      if (!csrfToken) {
         throw new Error('CSRF token not found on OrangeHRM login page - markup may have changed');
       }
-      const csrfToken = tokenMatch[1];
 
       // 2. POST credentials - session cookie is persisted in context.
       // OrangeHRM responds 302: success → /dashboard, failure → /auth/login.
