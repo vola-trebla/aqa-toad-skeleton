@@ -4,6 +4,7 @@ import { Routes } from '@/constants/routes';
 import { ApiEndpoints } from '@/constants/api-endpoints';
 import { OXD } from '@/constants/oxd-selectors';
 import { step } from '@/core/step';
+import { waitForApi } from '@/helpers/wait-for-api';
 
 export class EmployeeDetailPage extends BasePage {
   private readonly firstNameInput: Locator;
@@ -25,11 +26,9 @@ export class EmployeeDetailPage extends BasePage {
 
   async openEmployee(empNumber: number): Promise<void> {
     await step(`Открытие карточки сотрудника #${empNumber}`, async () => {
-      const waitForLoad = this.page.waitForResponse(
-        (r) => r.url().includes(ApiEndpoints.pim.personalDetails(empNumber)) && r.ok()
-      );
+      const done = waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber));
       await this.page.goto(Routes.pim.personalDetails(empNumber));
-      await waitForLoad;
+      await done;
       await expect(this.firstNameInput).toBeVisible();
     });
   }
@@ -38,11 +37,9 @@ export class EmployeeDetailPage extends BasePage {
     await step(`Обновление имени на "${first} ${last}"`, async () => {
       await this.firstNameInput.fill(first);
       await this.lastNameInput.fill(last);
-      const waitForSave = this.page.waitForResponse(
-        (r) => r.url().includes(ApiEndpoints.pim.personalDetails(empNumber)) && r.ok()
-      );
+      const done = waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber));
       await this.saveBtn.click();
-      await waitForSave;
+      await done;
     });
   }
 

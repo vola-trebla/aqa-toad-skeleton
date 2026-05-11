@@ -36,9 +36,13 @@ export class LoginPage extends StaticRoutePage {
 
   // --- Domain assertions ---
 
+  /**
+   * Verifies all visible elements of the login form. Uses expect.soft so every
+   * field contract is checked even if one fails - gives a full picture on breakage.
+   */
   async assertLoginFormReady(): Promise<void> {
     await step('Проверка формы входа', async () => {
-      await expect(this.logo).toBeVisible();
+      await expect.soft(this.logo).toBeVisible();
       await this.assertUsernameFieldContract();
       await this.assertPasswordFieldContract();
       await this.assertLoginButtonContract();
@@ -46,26 +50,27 @@ export class LoginPage extends StaticRoutePage {
   }
 
   async assertInvalidCredentialsShown(): Promise<void> {
-    await step('Проверка сообщения об ошибке', () =>
-      expect(this.errorMessage).toContainText(LoginMessages.invalidCredentials)
-    );
+    await step('Проверка сообщения об ошибке', async () => {
+      await expect(this.page).toHaveURL(/auth\/login/);
+      await expect(this.errorMessage).toContainText(LoginMessages.invalidCredentials);
+    });
   }
 
   // --- Private field contracts ---
 
   private async assertUsernameFieldContract(): Promise<void> {
-    await expect(this.usernameInput).toBeVisible();
-    await expect(this.usernameInput).toBeEnabled();
+    await expect.soft(this.usernameInput).toBeVisible();
+    await expect.soft(this.usernameInput).toBeEnabled();
   }
 
   private async assertPasswordFieldContract(): Promise<void> {
-    await expect(this.passwordInput).toBeVisible();
-    await expect(this.passwordInput).toBeEnabled();
-    await expect(this.passwordInput).toHaveAttribute('type', 'password');
+    await expect.soft(this.passwordInput).toBeVisible();
+    await expect.soft(this.passwordInput).toBeEnabled();
+    await expect.soft(this.passwordInput).toHaveAttribute('type', 'password');
   }
 
   private async assertLoginButtonContract(): Promise<void> {
-    await expect(this.loginBtn).toBeVisible();
-    await expect(this.loginBtn).toBeEnabled();
+    await expect.soft(this.loginBtn).toBeVisible();
+    await expect.soft(this.loginBtn).toBeEnabled();
   }
 }

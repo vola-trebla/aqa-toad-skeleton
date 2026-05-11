@@ -7,6 +7,7 @@ import { ApiEndpoints } from '@/constants/api-endpoints';
 import { PIMLabels } from '@/constants/pim';
 import { OXD } from '@/constants/oxd-selectors';
 import { step } from '@/core/step';
+import { waitForApi } from '@/helpers/wait-for-api';
 import type { CreatedEmployee } from '@/api/schemas/employee.schema';
 
 export class PIMListPage extends StaticRoutePage {
@@ -32,12 +33,10 @@ export class PIMListPage extends StaticRoutePage {
 
   async searchEmployeeById(id: string): Promise<void> {
     await step(`Поиск сотрудника по ID: ${id}`, async () => {
-      const waitForResults = this.page.waitForResponse(
-        (r) => r.url().includes(ApiEndpoints.pim.employees) && r.ok()
-      );
+      const done = waitForApi(this.page, ApiEndpoints.pim.employees);
       await this.employeeIdInput.fill(id);
       await this.searchBtn.click();
-      await waitForResults;
+      await done;
     });
   }
 
@@ -62,8 +61,9 @@ export class PIMListPage extends StaticRoutePage {
     await step(`Проверка наличия сотрудника ${employee.employeeId} в таблице`, async () => {
       const row = this.employeeRowById(employee.employeeId);
       await expect(row).toBeVisible();
-      await expect(row).toContainText(employee.firstName);
-      await expect(row).toContainText(employee.lastName);
+      // soft: report both field failures at once if the row content is wrong
+      await expect.soft(row).toContainText(employee.firstName);
+      await expect.soft(row).toContainText(employee.lastName);
     });
   }
 
