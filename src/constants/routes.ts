@@ -1,6 +1,7 @@
 export const Routes = {
   auth: {
     login: '/web/index.php/auth/login',
+    validate: '/web/index.php/auth/validate',
   },
   dashboard: {
     index: '/web/index.php/dashboard/index',

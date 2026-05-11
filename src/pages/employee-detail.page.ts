@@ -6,8 +6,6 @@ import { ApiEndpoints } from '@/constants/api-endpoints';
 import { step } from '@/core/step';
 
 export class EmployeeDetailPage extends BasePage {
-  readonly url = Routes.pim.list;
-
   private readonly _firstNameInput: Locator;
   private readonly _lastNameInput: Locator;
   private readonly _saveBtn: Locator;
