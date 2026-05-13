@@ -30,10 +30,11 @@ export class PIMListPage extends StaticRoutePage {
 
   async searchEmployeeById(id: string): Promise<void> {
     await step(`Search employee by ID: ${id}`, async () => {
-      const done = waitForApi(this.page, ApiEndpoints.pim.employees);
       await this.employeeIdInput.fill(id);
-      await this.searchBtn.click();
-      await done;
+      await Promise.all([
+        waitForApi(this.page, ApiEndpoints.pim.employees),
+        this.searchBtn.click(),
+      ]);
     });
   }
 

@@ -11,5 +11,5 @@ import { Page, Response } from '@playwright/test';
  * await done;
  */
 export function waitForApi(page: Page, endpoint: string): Promise<Response> {
-  return page.waitForResponse((r) => r.url().includes(endpoint) && r.ok());
+  return page.waitForResponse((r) => r.url().includes(endpoint) && (r.ok() || r.status() === 304));
 }
