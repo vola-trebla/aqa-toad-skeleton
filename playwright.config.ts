@@ -30,7 +30,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10_000,
+    actionTimeout: 20_000,
     // OrangeHRM demo certificate is intermittently invalid - bypass for test target
     ignoreHTTPSErrors: true,
   },

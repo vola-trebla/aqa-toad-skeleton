@@ -197,8 +197,7 @@ state. This avoids race conditions with optimistic UI updates:
 ```ts
 import { waitForApi } from '@/helpers/wait-for-api';
 
-await this.searchButton.click();
-await waitForApi(this.page, ApiEndpoints.pim.employees);
+await Promise.all([waitForApi(this.page, ApiEndpoints.pim.employees), this.searchButton.click()]);
 await expect(this.employeeRow).toBeVisible();
 ```
 

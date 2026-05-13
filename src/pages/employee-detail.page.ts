@@ -23,9 +23,10 @@ export class EmployeeDetailPage extends BasePage {
 
   async openEmployee(empNumber: number): Promise<void> {
     await step(`Open employee details #${empNumber}`, async () => {
-      const done = waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber));
-      await this.page.goto(Routes.pim.personalDetails(empNumber));
-      await done;
+      await Promise.all([
+        waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber)),
+        this.page.goto(Routes.pim.personalDetails(empNumber)),
+      ]);
       await expect(this.firstNameInput).toBeVisible();
     });
   }
@@ -34,9 +35,10 @@ export class EmployeeDetailPage extends BasePage {
     await step(`Update name to "${first} ${last}"`, async () => {
       await this.firstNameInput.fill(first);
       await this.lastNameInput.fill(last);
-      const done = waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber));
-      await this.saveBtn.click();
-      await done;
+      await Promise.all([
+        waitForApi(this.page, ApiEndpoints.pim.personalDetails(empNumber)),
+        this.saveBtn.click(),
+      ]);
     });
   }
 
