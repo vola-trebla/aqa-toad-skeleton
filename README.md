@@ -1,4 +1,4 @@
-# 🐸 PLAYWRIGHT-AI-SKELETON
+# PLAYWRIGHT-AI-SKELETON 💀
 
 **A production-ready Playwright + TypeScript test automation framework template.**
 
