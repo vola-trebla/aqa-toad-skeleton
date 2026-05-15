@@ -13,6 +13,13 @@ import { TestTags } from '@/constants/test-tags';
  * To activate: implement the login logic in src/fixtures/auth.fixtures.ts.
  */
 test.describe('Authenticated User', { tag: [TestTags.smoke, TestTags.auth] }, () => {
+  test.beforeEach(({ baseURL }) => {
+    test.skip(
+      baseURL === 'https://example.com',
+      'Placeholder test - configure BASE_URL in GitHub Secrets to run against your app'
+    );
+  });
+
   test('Can access a protected route without logging in', async ({ page }) => {
     // No login step here - the session is already applied to this browser context.
     await page.goto('/dashboard');

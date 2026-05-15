@@ -6,6 +6,13 @@ import { TestTags } from '@/constants/test-tags';
  * Must be fast (< 1 minute total), stable, and tagged with TestTags.smoke.
  */
 test.describe('Example Smoke Suite', { tag: [TestTags.smoke] }, () => {
+  test.beforeEach(({ baseURL }) => {
+    test.skip(
+      baseURL === 'https://example.com',
+      'Placeholder test - configure BASE_URL in GitHub Secrets to run against your app'
+    );
+  });
+
   test('User can open example page and see essential elements', async ({ examplePage }) => {
     // 1. Navigate to the page
     // The URL is defined inside the Page Object
