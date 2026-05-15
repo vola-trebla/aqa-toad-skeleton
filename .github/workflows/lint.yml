@@ -40,13 +40,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
-      - name: Run smoke + api projects
-        run: npx playwright test --project=smoke --project=api
+      
+      /**
+       * 🐸 SKELETON NOTE:
+       * By default, these tests might fail if they require a real environment.
+       * In the skeleton, we run them against the projects defined in playwright.config.ts.
+       * Update BASE_URL and secrets when you connect your real app.
+       */
+      - name: Run smoke tests
+        # We run the 'chromium' and 'api' projects as a sanity check.
+        # Since these are example tests, they should either pass or be skipped.
+        run: npx playwright test --project=chromium --project=api
         env:
-          BASE_URL: ${{ secrets.STAGING_URL }}
-          API_URL: ${{ secrets.API_URL }}
-          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          # These secrets should be configured in your GitHub Repository settings
+          BASE_URL: ${{ secrets.BASE_URL || 'https://example.com' }}
+          API_URL: ${{ secrets.API_URL || 'https://example.com' }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME || 'admin' }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'password123' }}
           CI: 'true'
 
       - name: Upload Playwright report

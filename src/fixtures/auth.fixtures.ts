@@ -1,27 +1,23 @@
 import { test as base } from '@playwright/test';
 import { config } from '@/config/env.config';
-import { Roles, Role } from '@/constants/roles';
-import { Routes } from '@/constants/routes';
 import * as path from 'path';
 import * as fs from 'fs';
 
-// CSRF token is embedded in the Vue mount as :token="&quot;...&quot;"
-const TOKEN_REGEX = /:token="&quot;([^&]+)&quot;"/;
+/**
+ * 🐸 AUTH FIXTURES
+ *
+ * This file demonstrates how to implement "Global Auth" or "Worker-scoped Auth".
+ * Instead of logging in before every test, we do it once per worker and reuse the state.
+ */
 
 export type AuthWorkerFixtures = {
   workerStorageState: string;
 };
 
 /**
- * Factory that creates a role-scoped auth test base.
- * Each role gets its own storage-state file so parallel suites
- * with different roles do not clobber each other.
- *
- * @example
- *   export const adminTest  = createAuthTest('admin');
- *   export const managerTest = createAuthTest('manager');
+ * Factory that creates an authenticated test base.
  */
-export function createAuthTest(role: Role) {
+export function createAuthTest(role: string) {
   return base.extend<object, AuthWorkerFixtures>({
     workerStorageState: [
       async ({ playwright }, use, workerInfo) => {
@@ -29,43 +25,32 @@ export function createAuthTest(role: Role) {
           '.auth',
           `${role}-worker-${workerInfo.workerIndex}.json`
         );
+
+        // If file already exists and is fresh, you could skip login
+        // For this skeleton, we'll show the login logic:
+
         await fs.promises.mkdir(path.dirname(storageStatePath), { recursive: true });
 
         const apiContext = await playwright.request.newContext({
           baseURL: config.BASE_URL,
-          ignoreHTTPSErrors: true,
         });
 
-        // 1. GET login page - acquires CSRF cookie and embedded token
-        const loginPageResponse = await apiContext.get(Routes.auth.login);
-        const html = await loginPageResponse.text();
-        const csrfToken = html.match(TOKEN_REGEX)?.[1];
-        if (!csrfToken) {
-          throw new Error('CSRF token not found on OrangeHRM login page - markup may have changed');
-        }
+        /**
+         * 🐸 IMPLEMENT YOUR LOGIN LOGIC HERE
+         *
+         * Example for a standard API login:
+         *
+         * const loginResponse = await apiContext.post('/api/login', {
+         *   data: {
+         *     username: config.ADMIN_USERNAME,
+         *     password: config.ADMIN_PASSWORD,
+         *   }
+         * });
+         *
+         * if (!loginResponse.ok()) throw new Error('Auth failed!');
+         */
 
-        // 2. POST credentials - session cookie is persisted in context.
-        // OrangeHRM responds 302: success → /dashboard, failure → /auth/login.
-        const validateResponse = await apiContext.post(Routes.auth.validate, {
-          form: {
-            _token: csrfToken,
-            username: config.ADMIN_USERNAME,
-            password: config.ADMIN_PASSWORD,
-          },
-          maxRedirects: 0,
-        });
-
-        const location = validateResponse.headers()['location'] ?? '';
-        const status = validateResponse.status();
-        const looksLikeSuccess =
-          (status === 302 || status === 303) && !location.includes(Routes.auth.login);
-        if (!looksLikeSuccess) {
-          throw new Error(
-            `Auth failed for role "${role}": HTTP ${status}, Location="${location}". ` +
-              `Check ADMIN_USERNAME/ADMIN_PASSWORD for ${config.BASE_URL}.`
-          );
-        }
-
+        // For now, we'll just save an empty state as a placeholder
         await apiContext.storageState({ path: storageStatePath });
         await apiContext.dispose();
 
@@ -74,9 +59,12 @@ export function createAuthTest(role: Role) {
       { scope: 'worker' },
     ],
 
-    // Override Playwright's built-in storageState - every page/request is authenticated
+    // This overrides Playwright's default storageState for all tests using this base
     storageState: ({ workerStorageState }, use) => use(workerStorageState),
   });
 }
 
-export const authTest = createAuthTest(Roles.admin);
+/**
+ * Use `authTest` in your specs instead of `test` to have an authenticated browser.
+ */
+export const authTest = createAuthTest('admin');

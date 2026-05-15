@@ -5,7 +5,7 @@ Status: Accepted
 
 ## Context
 
-A single `src/fixtures/index.ts` was becoming a God file with auth, page objects, API clients and test data side-by-side. API tests required a browser page (`page.request`) even when they did not need UI.
+A single fixtures file becomes a God file as the project grows. API tests often do not need a browser page, so they should be isolated.
 
 ## Decision
 
@@ -13,33 +13,26 @@ Split fixtures by responsibility:
 
 ```
 src/fixtures/
-  auth.fixtures.ts   - workerStorageState, storageState override (role-aware path)
-  api.fixtures.ts    - API clients, test data fixtures (extends authTest)
+  auth.fixtures.ts   - authenticated storage state (worker-scoped)
+  api.fixtures.ts    - API clients and test data (extends authTest)
   page.fixtures.ts   - Page Object fixtures (extends apiTest)
-  index.ts           - re-exports test, apiTest, authTest, expect
+  index.ts           - unified exports
 ```
 
 Three public test entry points:
 
-- `authTest` - auth-only (storage state)
-- `apiTest` - auth + API clients + test data, uses Playwright's `request` fixture (no browser page in test bodies)
-- `test` - full UI test (auth + api + page objects)
+- `authTest`: authenticated context only.
+- `apiTest`: authenticated context + API registry (no browser page).
+- `test`: full UI test (authenticated context + API registry + Page Objects).
 
 ## Consequences
 
 ### Positive
 
-- API tests use `apiTest` and never reach for `page` - clearer intent and faster
-- Adding a new domain (e.g. `recruitment`) does not require editing one central file
-- Role-aware storage state path (`.auth/admin-worker-0.json`) is ready for multi-role auth without restructure
-- Cleanup failures in fixtures are surfaced via `console.error` instead of silent catch
+- API tests use `apiTest` and are faster (no browser page initialization).
+- Domain-specific clients are registered in `ApiRegistry` and automatically available in fixtures.
+- Worker-scoped storage state prevents race conditions in parallel runs.
 
 ### Negative
 
-- Three files instead of one, slightly more boilerplate
-- Spec authors need to choose the correct entry point (mitigated by clear naming and `CONVENTIONS.md`)
-
-## Future work
-
-- Add OAuth-based API auth so `apiTest` can skip the UI-login browser context entirely per worker
-- Add `managerTest`/`employeeTest` when OrangeHRM scope grows beyond admin
+- More files to manage, but better scalability.

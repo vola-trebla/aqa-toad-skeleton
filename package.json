@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:smoke": "npx playwright test --project=smoke",
-    "test:critical": "npx playwright test --project=critical",
+    "test:ui": "npx playwright test --project=chromium",
     "test:api": "npx playwright test --project=api",
-    "test:regression": "npx playwright test --project=regression-chrome",
     "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",

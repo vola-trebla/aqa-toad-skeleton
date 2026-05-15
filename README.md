@@ -1,22 +1,26 @@
-# AQA-TOAD-SKELETON
+# 🐸 AQA-TOAD-SKELETON
 
-Ultimate SDET Framework Skeleton | Playwright + TypeScript + Zod | OrangeHRM Demo
+**The Ultimate SDET Framework Skeleton** | Playwright + TypeScript + Zod
 
-This is a production-grade automation framework designed for modern web applications. It implements advanced engineering patterns to ensure high cohesion, low coupling, and exceptional test stability.
+Designed for any web project. Ships with an OrangeHRM Demo as a reference.
 
-## 🚀 Key Architectural Features
+This is a production-grade automation framework designed to be **cloned and adapted**. It implements advanced engineering patterns to ensure high cohesion, low coupling, and exceptional test stability.
 
-- **Domain-Driven Page Object Model**: Full encapsulation of DOM details. Page Objects expose high-level domain actions and assertions, keeping spec files clean and focused on business scenarios.
-- **Strict Private Locators**: Locators are kept private and initialized in constructors using modern Playwright selectors (`getByRole`, `getByPlaceholder`, `getByLabel`), following accessibility best practices.
-- **Hybrid UI/API Testing**: Integrated API clients for lightning-fast test data setup and teardown, combined with robust UI verification.
-- **Fail-Fast Environment Validation**: Automated configuration validation on startup using **Zod**, preventing runtime failures due to environment drift.
-- **Advanced CI/CD Pipelines**:
-  - **PR Checks**: Automated linting, type-checking, and smoke testing on every Pull Request.
-  - **Scalable Regression**: Nightly runs with worker-level sharding and automated report merging.
-- **Professional Tooling**:
-  - **Husky & lint-staged**: Automated Prettier formatting on every commit.
-  - **Custom Slack Reporting**: Real-time test results with flaky-test detection and GitHub Action run links.
-  - **Allure Integration**: Transparent reporting with automated business-level steps.
+## 🌟 Why this Skeleton?
+
+- **Universal Core**: Infrastructure is decoupled from the target application.
+- **Fail-Fast Configuration**: Environment validation via Zod prevents "why is this failing?" debugging sessions.
+- **Domain-Driven POM**: Cleanest possible test specs.
+- **Hybrid UI/API Architecture**: Ready-to-use API clients for fast data setup.
+- **Professional Tooling**: Pre-configured CI/CD, linting, and reporting.
+
+## 🛠 Adapt for Your Project
+
+This skeleton is built to be yours in minutes. See the **[Adaptation Guide](docs/ADAPTATION_GUIDE.md)** for a step-by-step walkthrough on:
+
+- Switching the Target URL.
+- Adding your own API Clients and Page Objects.
+- Purging the Demo files.
 
 ## 🛠 Tech Stack
 

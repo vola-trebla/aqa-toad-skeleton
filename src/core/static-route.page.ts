@@ -2,15 +2,23 @@ import { BasePage } from './base.page';
 import { step } from './step';
 
 /**
- * Page Object with a fixed URL. Provides navigate() for opening the page.
- * Pages that require parameters (e.g. EmployeeDetailPage) should extend BasePage directly
- * and expose explicit open*() methods.
+ * 🐸 STATIC ROUTE PAGE
  *
- * URL is relative - Playwright resolves it against `use.baseURL` from the config.
+ * Use this for pages that have a fixed, parameter-less URL (e.g., /login, /dashboard).
+ * It provides a convenient `navigate()` method out of the box.
+ *
+ * For dynamic URLs (e.g., /user/123), extend `BasePage` instead.
  */
 export abstract class StaticRoutePage extends BasePage {
+  /**
+   * The relative URL of the page (e.g., '/login').
+   * It will be resolved against `baseURL` from the config.
+   */
   abstract readonly url: string;
 
+  /**
+   * Navigates to the page and waits for the DOM to load.
+   */
   async navigate(): Promise<void> {
     await step(`Navigate to page: ${this.url}`, async () => {
       await this.page.goto(this.url);

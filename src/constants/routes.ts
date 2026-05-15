@@ -1,14 +1,11 @@
+/**
+ * 🐸 UI ROUTES
+ *
+ * Central place for all application URLs.
+ * Use these in your Page Objects instead of hardcoding strings.
+ */
 export const Routes = {
-  auth: {
-    login: '/web/index.php/auth/login',
-    validate: '/web/index.php/auth/validate',
-  },
-  dashboard: {
-    index: '/web/index.php/dashboard/index',
-  },
-  pim: {
-    list: '/web/index.php/pim/viewEmployeeList',
-    personalDetails: (empNumber: number) =>
-      `/web/index.php/pim/viewPersonalDetails/empNumber/${empNumber}`,
-  },
+  home: '/',
+  login: '/login',
+  example: '/example',
 } as const;

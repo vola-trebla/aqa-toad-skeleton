@@ -1,5 +1,5 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { z, ZodType } from 'zod';
+import { z, ZodTypeAny } from 'zod';
 import { ApiError } from '@/api/api-error';
 
 export type ApiCallResult<T> =
@@ -13,15 +13,15 @@ export abstract class BaseApiClient {
    * Parse a happy-path response and throw ApiError on non-2xx.
    * Use for create/get/update flows where errors should fail the test setup.
    */
-  protected async parseResponse<S extends ZodType<{ data: unknown }>>(
+  protected async parseResponse<S extends ZodTypeAny>(
     response: APIResponse,
     schema: S
-  ): Promise<z.infer<S>['data']> {
+  ): Promise<z.infer<S>> {
     if (!response.ok()) {
       const body = await response.text().catch(() => '<unreadable body>');
       throw new ApiError(response.status(), response.url(), body);
     }
-    return schema.parse(await response.json()).data;
+    return schema.parse(await response.json());
   }
 
   /**
@@ -29,15 +29,15 @@ export abstract class BaseApiClient {
    * Use in negative tests that need to assert on status/body without exception.
    * Returns raw text body on error so callers can make assertions on it.
    */
-  protected async tryParseResponse<S extends ZodType<{ data: unknown }>>(
+  protected async tryParseResponse<S extends ZodTypeAny>(
     response: APIResponse,
     schema: S
-  ): Promise<ApiCallResult<z.infer<S>['data']>> {
+  ): Promise<ApiCallResult<z.infer<S>>> {
     const status = response.status();
     if (!response.ok()) {
       const body = await response.text().catch(() => '<unreadable body>');
       return { ok: false, status, body };
     }
-    return { ok: true, status, data: schema.parse(await response.json()).data };
+    return { ok: true, status, data: schema.parse(await response.json()) };
   }
 }
