@@ -18,6 +18,7 @@ Designed to be **cloned once and adapted** to any web or API project.
 
 ## ✨ Why use this skeleton?
 
+- **AI-assisted onboarding** - `docs/ADAPTATION_GUIDE.md` is written as an instruction for AI assistants. Drop it into Claude or Copilot and get a guided, step-by-step adaptation to your project.
 - **Zero ambiguity on architecture** - every pattern has a clear example: API clients, Page Objects, Builders, Fixtures.
 - **Fail-fast env validation** - Zod validates your `.env` at startup, not mid-run.
 - **Hybrid UI + API testing** - API clients and UI Page Objects share the same fixture chain.
@@ -127,9 +128,17 @@ npx playwright test --grep @critical
 
 ---
 
-## 🔧 Adapting to Your Project
+## 🤖 Adapting to Your Project with AI
 
-See the **[Adaptation Guide](docs/ADAPTATION_GUIDE.md)** - it walks through replacing the example files with your own domain in under 30 minutes.
+`docs/ADAPTATION_GUIDE.md` is written as a structured instruction for AI assistants.
+
+**To adapt the skeleton:**
+
+1. Open a new chat with Claude, Copilot, or any other AI assistant.
+2. Attach or paste the contents of `docs/ADAPTATION_GUIDE.md`.
+3. Say: _"Help me adapt the AQA-TOAD-SKELETON to my project."_
+
+The AI will ask about your app URL, auth type, domain entities, and key pages - then make all the necessary changes in the right order, following the framework's engineering standards.
 
 ---
 
