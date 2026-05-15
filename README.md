@@ -1,98 +1,137 @@
 # 🐸 AQA-TOAD-SKELETON
 
-**The Ultimate SDET Framework Skeleton** | Playwright + TypeScript + Zod
+**A production-ready Playwright + TypeScript test automation framework template.**
 
-Designed for any web project. Ships with an OrangeHRM Demo as a reference.
+Clone it, adapt it, ship it. No boilerplate hunting, no wiring up from scratch.
 
-This is a production-grade automation framework designed to be **cloned and adapted**. It implements advanced engineering patterns to ensure high cohesion, low coupling, and exceptional test stability.
-
-## 🌟 Why this Skeleton?
-
-- **Universal Core**: Infrastructure is decoupled from the target application.
-- **Fail-Fast Configuration**: Environment validation via Zod prevents "why is this failing?" debugging sessions.
-- **Domain-Driven POM**: Cleanest possible test specs.
-- **Hybrid UI/API Architecture**: Ready-to-use API clients for fast data setup.
-- **Professional Tooling**: Pre-configured CI/CD, linting, and reporting.
-
-## 🛠 Adapt for Your Project
-
-This skeleton is built to be yours in minutes. See the **[Adaptation Guide](docs/ADAPTATION_GUIDE.md)** for a step-by-step walkthrough on:
-
-- Switching the Target URL.
-- Adding your own API Clients and Page Objects.
-- Purging the Demo files.
-
-## 🛠 Tech Stack
-
-- **Language**: TypeScript (Modern ESNext / Bundler resolution)
-- **Test Runner**: [Playwright](https://playwright.dev/)
-- **Validation**: [Zod](https://zod.dev/)
-- **VCS Hooks**: [Husky](https://typicode.github.io/husky/) & [lint-staged](https://github.com/okonet/lint-staged)
-- **Linting/Formatting**: ESLint & Prettier
-- **Target App**: [OrangeHRM Demo](https://opensource-demo.orangehrmlive.com/)
-
-## 🏗 Project Structure
-
-```
-project-root/
-├── .github/workflows/       # CI/CD pipelines (Lint + Typecheck, Smoke, Nightly)
-├── docs/
-│   ├── adr/                 # Architecture Decision Records
-│   └── CONVENTIONS.md       # Test naming, imports, selector and builder rules
-├── src/
-│   ├── api/                 # Typed API clients (EmployeeApiClient), Zod schemas, ApiError
-│   ├── config/              # Zod-validated environment configuration
-│   ├── core/                # Base classes: BasePage, BaseComponent, StaticRoutePage
-│   ├── components/          # Reusable UI components (OrangeTable)
-│   ├── constants/           # Routes, API endpoints, OXD selectors, test tags
-│   ├── pages/               # Page Objects (domain actions + assertions, no raw locators)
-│   ├── fixtures/            # Fixture chain: auth -> api -> page (worker-scoped auth)
-│   ├── helpers/             # BaseBuilder, EmployeeBuilder, waitForApi
-│   └── reporters/           # Custom Slack reporter with flaky-test detection
-├── tests/                   # Tiered spec suites
-│   ├── smoke/               # Fast sanity checks (PR gate)
-│   ├── critical/            # Happy-path end-to-end scenarios
-│   ├── regression/          # Negative and edge-case scenarios
-│   └── api/                 # Contract tests (API shape and semantics)
-└── playwright.config.ts     # Projects: smoke, api, regression-chrome
-```
-
-## 🚦 Getting Started
-
-1.  **Installation**:
-
-    ```bash
-    npm install
-    npx playwright install
-    ```
-
-2.  **Configuration**:
-    Copy `.env.example` to `.env`. For the OrangeHRM demo site, safe defaults are applied automatically.
-
-    ```bash
-    cp .env.example .env
-    ```
-
-3.  **Execution**:
-
-    ```bash
-    # Run smoke tests
-    npm run test:smoke
-
-    # Run in headed mode
-    HEADLESS=false npx playwright test --project=smoke
-    ```
-
-## 📋 Engineering Standards
-
-- **Encapsulation**: Assertions and locators live in Page Objects. Spec files express domain intent only. See [ADR 0001](docs/adr/0001-domain-first-test-api.md).
-- **Fixture chain**: `authTest -> apiTest -> test` with worker-scoped storage state. See [ADR 0002](docs/adr/0002-fixture-architecture.md).
-- **Selector priority**: `getByRole` first, OXD CSS classes isolated to `src/constants/oxd-selectors.ts`, XPath prohibited. See [ADR 0003](docs/adr/0003-selector-strategy.md).
-- **Atomicity**: Tests are independent and manage their own data lifecycle via fixtures.
-- **Branching**: Strict "Feature Branch -> Pull Request" workflow enforced by the Git Workflow Manifesto.
-- **Type Safety**: No `any` type allowed. Strict TypeScript checking (`noUncheckedIndexedAccess`, `noImplicitOverride`) is part of the CI pipeline.
-- **Conventions**: Test naming, import order, builder usage, tag constants - see [CONVENTIONS](docs/CONVENTIONS.md).
+> Playwright boilerplate | TypeScript e2e framework | SDET starter kit | Page Object Model template | API testing with Zod
 
 ---
 
-_Stay professional, stay focused._
+## What is this?
+
+A universal test automation skeleton built for SDETs who want to start a new project the right way - without spending the first week on infrastructure. It implements battle-tested engineering patterns and ships with working CI, Docker, and a Slack reporter out of the box.
+
+Designed to be **cloned once and adapted** to any web or API project.
+
+---
+
+## Why use this skeleton?
+
+- **Zero ambiguity on architecture** - every pattern has a clear example: API clients, Page Objects, Builders, Fixtures.
+- **Fail-fast env validation** - Zod validates your `.env` at startup, not mid-run.
+- **Hybrid UI + API testing** - API clients and UI Page Objects share the same fixture chain.
+- **Worker-scoped auth** - login once per worker, not before every test.
+- **Ready for CI/CD** - PR smoke gate + nightly regression with sharding, all pre-wired.
+
+---
+
+## Tech Stack
+
+| Layer                   | Tool                                                     |
+| ----------------------- | -------------------------------------------------------- |
+| Test runner             | [Playwright](https://playwright.dev/)                    |
+| Language                | TypeScript (strict mode)                                 |
+| Schema & env validation | [Zod](https://zod.dev/)                                  |
+| Git hooks               | [Husky](https://typicode.github.io/husky/) + lint-staged |
+| Linting / Formatting    | ESLint + Prettier                                        |
+| Reporting               | Allure + custom Slack reporter                           |
+| CI/CD                   | GitHub Actions                                           |
+| Containerization        | Docker + docker-compose                                  |
+
+---
+
+## Project Structure
+
+```
+project-root/
+├── .github/workflows/
+│   ├── lint.yml             # PR gate: lint, typecheck, smoke tests
+│   └── nightly.yml          # Scheduled regression with sharding + report merge
+├── docker/                  # Dockerfile + docker-compose for local parallel runs
+├── docs/
+│   ├── adr/                 # Architecture Decision Records
+│   ├── ADAPTATION_GUIDE.md  # Step-by-step: replace examples with your domain
+│   └── CONVENTIONS.md       # Naming, imports, selector and builder rules
+├── src/
+│   ├── api/
+│   │   ├── clients/         # BaseApiClient + typed domain clients
+│   │   ├── schemas/         # Zod schemas for API contracts
+│   │   ├── registry.ts      # Central registry: api.example.createItem()
+│   │   └── api-error.ts     # Typed API error class
+│   ├── config/              # Zod-validated env config (BASE_URL, credentials, CI flag)
+│   ├── core/                # BasePage, StaticRoutePage, BaseComponent, step()
+│   ├── constants/           # Routes, API endpoints, TestTags
+│   ├── pages/               # Page Objects (private locators, public domain actions)
+│   ├── fixtures/            # Fixture chain: apiTest -> test (with worker-scoped auth)
+│   ├── helpers/
+│   │   ├── builders/        # Immutable BaseBuilder + ItemBuilder (fresh data per build)
+│   │   └── wait-for-api.ts  # Race-free network interception helper
+│   └── reporters/           # Slack reporter with failure summary
+└── tests/
+    ├── smoke/               # Fast sanity checks - triggered on every PR
+    ├── critical/            # Happy-path E2E scenarios
+    ├── regression/          # Negative and edge-case scenarios
+    └── api/                 # Contract tests (Zod schema + semantics)
+```
+
+---
+
+## Getting Started
+
+**1. Install**
+
+```bash
+npm install
+npx playwright install
+```
+
+**2. Configure**
+
+```bash
+cp .env.example .env
+# Edit .env with your app URL and credentials
+```
+
+**3. Run**
+
+```bash
+# All tests
+npm test
+
+# UI tests (Chromium only)
+npm run test:ui
+
+# API tests only
+npm run test:api
+
+# Filter by tag
+npx playwright test --grep @smoke
+npx playwright test --grep @critical
+```
+
+---
+
+## Engineering Standards
+
+**Encapsulation** - Locators are private. Page Objects expose domain actions (`login()`, `assertOpen()`), not Playwright internals. Tests express business intent only. See [ADR 0001](docs/adr/0001-domain-first-test-api.md).
+
+**Fixture composition** - `apiTest` provides typed API clients. `test` extends it with Page Objects. Auth is worker-scoped via `createAuthTest(role)`. See [ADR 0002](docs/adr/0002-fixture-architecture.md).
+
+**Selector strategy** - `getByRole` and semantic locators first. CSS strings isolated to components. XPath prohibited. See [ADR 0003](docs/adr/0003-selector-strategy.md).
+
+**API-first data setup** - Create test data via API before UI tests. Faster and more reliable than navigating setup flows through the browser.
+
+**Immutable builders** - `ItemBuilder.withName('x').build()` generates typed, Zod-validated payloads with random defaults. No shared mutable state between tests.
+
+**Typed errors** - `ApiError` carries `status`, `url`, and `body`. `tryParseResponse()` returns a discriminated union for negative test assertions without try/catch.
+
+---
+
+## Adapting to Your Project
+
+See the **[Adaptation Guide](docs/ADAPTATION_GUIDE.md)** - it walks through replacing the example files with your own domain in under 30 minutes.
+
+---
+
+_Stay professional, stay focused. 🐸_

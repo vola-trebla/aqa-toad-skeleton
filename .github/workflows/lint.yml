@@ -46,9 +46,7 @@ jobs:
       # In the skeleton, we run them against the projects defined in playwright.config.ts.
       # Update BASE_URL and secrets when you connect your real app.
       - name: Run smoke tests
-        # We run the 'chromium' and 'api' projects as a sanity check.
-        # Since these are example tests, they should either pass or be skipped.
-        run: npx playwright test --project=chromium --project=api
+        run: npx playwright test --project=chromium --project=api --grep @smoke
         env:
           # These secrets should be configured in your GitHub Repository settings
           BASE_URL: ${{ secrets.BASE_URL || 'https://example.com' }}
