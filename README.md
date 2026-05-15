@@ -8,6 +8,20 @@ Clone it, adapt it, ship it. No boilerplate hunting, no wiring up from scratch.
 
 ---
 
+## ⚡ Quick Start with AI
+
+Got Claude Code? Run this inside the cloned repo:
+
+```
+/adapt
+```
+
+That's it. Claude will read the framework, ask about your app, and adapt the entire skeleton - env config, API clients, Page Objects, fixtures, and first tests - to your project in one guided session.
+
+No manual wiring. No reading docs first.
+
+---
+
 ## 🎯 What is this?
 
 A universal test automation skeleton built for SDETs who want to start a new project the right way - without spending the first week on infrastructure. It implements battle-tested engineering patterns and ships with working CI, Docker, and a Slack reporter out of the box.
