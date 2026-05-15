@@ -5,6 +5,13 @@ import { test } from '@/fixtures';
  * A failure here means the core product is broken.
  */
 test.describe('Example Critical Flow', () => {
+  test.beforeEach(({ baseURL }) => {
+    test.skip(
+      baseURL === 'https://example.com',
+      'Placeholder test - configure BASE_URL in GitHub Secrets to run against your app'
+    );
+  });
+
   test('Complete item lifecycle', async ({ api, getItemDetail }) => {
     // 1. Create test data via API - fast and reliable
     const item = await api.example.createItem({ name: 'Critical Item' });

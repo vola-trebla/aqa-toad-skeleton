@@ -5,6 +5,13 @@ import { apiTest as test, expect } from '@/fixtures';
  * These run without a browser and are significantly faster than UI tests.
  */
 test.describe('Example API Suite', () => {
+  test.beforeEach(({ baseURL }) => {
+    test.skip(
+      baseURL === 'https://example.com',
+      'Placeholder test - configure BASE_URL in GitHub Secrets to run against your app'
+    );
+  });
+
   test('Should be able to create a new item', async ({ api }) => {
     const payload = {
       name: 'Example Item',
