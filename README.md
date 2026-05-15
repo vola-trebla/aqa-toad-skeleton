@@ -8,7 +8,7 @@ Clone it, adapt it, ship it. No boilerplate hunting, no wiring up from scratch.
 
 ---
 
-## What is this?
+## 🎯 What is this?
 
 A universal test automation skeleton built for SDETs who want to start a new project the right way - without spending the first week on infrastructure. It implements battle-tested engineering patterns and ships with working CI, Docker, and a Slack reporter out of the box.
 
@@ -16,7 +16,7 @@ Designed to be **cloned once and adapted** to any web or API project.
 
 ---
 
-## Why use this skeleton?
+## ✨ Why use this skeleton?
 
 - **Zero ambiguity on architecture** - every pattern has a clear example: API clients, Page Objects, Builders, Fixtures.
 - **Fail-fast env validation** - Zod validates your `.env` at startup, not mid-run.
@@ -26,7 +26,7 @@ Designed to be **cloned once and adapted** to any web or API project.
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 | Layer                   | Tool                                                     |
 | ----------------------- | -------------------------------------------------------- |
@@ -41,7 +41,7 @@ Designed to be **cloned once and adapted** to any web or API project.
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 project-root/
@@ -77,7 +77,7 @@ project-root/
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 **1. Install**
 
@@ -112,7 +112,7 @@ npx playwright test --grep @critical
 
 ---
 
-## Engineering Standards
+## 📋 Engineering Standards
 
 **Encapsulation** - Locators are private. Page Objects expose domain actions (`login()`, `assertOpen()`), not Playwright internals. Tests express business intent only. See [ADR 0001](docs/adr/0001-domain-first-test-api.md).
 
@@ -128,7 +128,7 @@ npx playwright test --grep @critical
 
 ---
 
-## Adapting to Your Project
+## 🔧 Adapting to Your Project
 
 See the **[Adaptation Guide](docs/ADAPTATION_GUIDE.md)** - it walks through replacing the example files with your own domain in under 30 minutes.
 

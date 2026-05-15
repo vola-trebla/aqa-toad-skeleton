@@ -31,7 +31,7 @@ jobs:
         run: npm run typecheck
 
   smoke:
-    name: UI & API Smoke
+    name: Smoke Tests
     needs: lint
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -40,22 +40,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
-      
-      # 🐸 SKELETON NOTE:
-      # By default, these tests might fail if they require a real environment.
-      # In the skeleton, we run them against the projects defined in playwright.config.ts.
-      # Update BASE_URL and secrets when you connect your real app.
+
+      # Runs only @smoke-tagged tests against chromium and the api project.
+      # Configure BASE_URL and credentials in GitHub Repository Secrets.
       - name: Run smoke tests
         run: npx playwright test --project=chromium --project=api --grep @smoke
         env:
-          # These secrets should be configured in your GitHub Repository settings
           BASE_URL: ${{ secrets.BASE_URL || 'https://example.com' }}
           API_URL: ${{ secrets.API_URL || 'https://example.com' }}
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME || 'admin' }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD || 'password123' }}
           CI: 'true'
 
-      - name: Upload Playwright report
+      - name: Upload report on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
