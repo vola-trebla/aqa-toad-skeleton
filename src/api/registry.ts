@@ -1,17 +1,19 @@
 import { APIRequestContext } from '@playwright/test';
-import { EmployeeApiClient } from './clients/employee.client';
+import { ExampleApiClient } from './clients/example.client';
 
 /**
- * Central registry of all API clients. Extend this object when adding new
- * domain clients (job, leave, recruitment) - fixtures and tests get access
- * to the new client without touching the fixture file.
+ * 🐸 API REGISTRY
+ *
+ * Central registry of all API clients.
+ * Extend this interface and factory when adding new domain clients.
+ * This pattern allows fixtures to access all clients via a single object.
  */
 export interface ApiRegistry {
-  employee: EmployeeApiClient;
+  example: ExampleApiClient;
 }
 
 export function createApiRegistry(request: APIRequestContext): ApiRegistry {
   return {
-    employee: new EmployeeApiClient(request),
+    example: new ExampleApiClient(request),
   };
 }

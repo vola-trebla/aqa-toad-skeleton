@@ -1,23 +1,18 @@
 import { apiTest } from './api.fixtures';
-import { LoginPage } from '@/pages/login.page';
-import { DashboardPage } from '@/pages/dashboard.page';
-import { PIMListPage } from '@/pages/pim-list.page';
-import { EmployeeDetailPage } from '@/pages/employee-detail.page';
+import { ExamplePage } from '@/pages/example.page';
 
 export type PageFixtures = {
-  loginPage: LoginPage;
-  dashboardPage: DashboardPage;
-  pimListPage: PIMListPage;
-  employeeDetailPage: EmployeeDetailPage;
+  examplePage: ExamplePage;
 };
 
 /**
- * Full UI test - composes auth + api + page fixtures.
- * Use this for spec files that need page objects.
+ * 🐸 UI TEST FIXTURE
+ *
+ * Full UI test fixture that composes API and Page fixtures.
+ * Use this in your spec files to get access to all Page Objects.
  */
 export const test = apiTest.extend<PageFixtures>({
-  loginPage: async ({ page }, use) => use(new LoginPage(page)),
-  dashboardPage: async ({ page }, use) => use(new DashboardPage(page)),
-  pimListPage: async ({ page }, use) => use(new PIMListPage(page)),
-  employeeDetailPage: async ({ page }, use) => use(new EmployeeDetailPage(page)),
+  examplePage: async ({ page }, use) => {
+    await use(new ExamplePage(page));
+  },
 });

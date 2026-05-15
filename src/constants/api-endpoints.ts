@@ -1,9 +1,12 @@
-const BASE = '/web/index.php/api/v2';
-
+/**
+ * 🐸 API ENDPOINTS
+ *
+ * Keep all your API paths here.
+ * Use functions for endpoints with parameters (e.g., /items/${id}).
+ */
 export const ApiEndpoints = {
-  pim: {
-    employees: `${BASE}/pim/employees`,
-    employee: (empNumber: number) => `${BASE}/pim/employees/${empNumber}`,
-    personalDetails: (empNumber: number) => `${BASE}/pim/employees/${empNumber}/personal-details`,
+  example: {
+    items: '/api/items',
+    item: (id: number) => `/api/items/${id}`,
   },
 } as const;
