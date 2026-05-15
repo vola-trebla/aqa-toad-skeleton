@@ -1,5 +1,5 @@
 {
-  "name": "aqa-toad-skeleton",
+  "name": "playwright-ai-skeleton",
   "version": "1.0.0",
   "description": "Ultimate SDET Framework Skeleton | Playwright + TypeScript + Zod",
   "main": "index.js",

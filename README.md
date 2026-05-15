@@ -1,4 +1,4 @@
-# 🐸 AQA-TOAD-SKELETON
+# 🐸 PLAYWRIGHT-AI-SKELETON
 
 **A production-ready Playwright + TypeScript test automation framework template.**
 
@@ -136,7 +136,7 @@ npx playwright test --grep @critical
 
 1. Open a new chat with Claude, Copilot, or any other AI assistant.
 2. Attach or paste the contents of `docs/ADAPTATION_GUIDE.md`.
-3. Say: _"Help me adapt the AQA-TOAD-SKELETON to my project."_
+3. Say: _"Help me adapt the PLAYWRIGHT-AI-SKELETON to my project."_
 
 The AI will ask about your app URL, auth type, domain entities, and key pages - then make all the necessary changes in the right order, following the framework's engineering standards.
 

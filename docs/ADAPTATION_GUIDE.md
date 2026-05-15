@@ -4,7 +4,7 @@ This file is designed to be used with an AI assistant (Claude, Copilot, Gemini, 
 
 **How to use:** Open a new AI chat, attach or paste this file, and say:
 
-> "Help me adapt the AQA-TOAD-SKELETON to my project."
+> "Help me adapt the PLAYWRIGHT-AI-SKELETON to my project."
 
 The AI will ask you the right questions and make the changes step by step.
 
@@ -12,7 +12,7 @@ The AI will ask you the right questions and make the changes step by step.
 
 ## Instructions for the AI
 
-You are helping a developer adapt the AQA-TOAD-SKELETON framework to their specific project.
+You are helping a developer adapt the PLAYWRIGHT-AI-SKELETON framework to their specific project.
 The skeleton is located in the current working directory.
 
 ### Step 1 - Gather project information

@@ -1,6 +1,6 @@
 # 📜 Git Workflow Manifesto
 
-Rules for managing the AQA-TOAD-SKELETON repository to ensure engineering excellence and professional order.
+Rules for managing the PLAYWRIGHT-AI-SKELETON repository to ensure engineering excellence and professional order.
 
 ## 1. Protected Waters (Main Branch Protection)
 

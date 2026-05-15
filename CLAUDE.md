@@ -1,6 +1,6 @@
-# AQA-TOAD-SKELETON - SDET Workspace Context
+# PLAYWRIGHT-AI-SKELETON - SDET Workspace Context
 
-This file defines the foundational identity and workflows for the AQA-TOAD-SKELETON project.
+This file defines the foundational identity and workflows for the PLAYWRIGHT-AI-SKELETON project.
 
 ## 👤 Assistant Identity
 
