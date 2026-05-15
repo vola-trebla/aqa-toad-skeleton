@@ -50,7 +50,6 @@ project-root/
 │   └── nightly.yml          # Scheduled regression with sharding + report merge
 ├── docker/                  # Dockerfile + docker-compose for local parallel runs
 ├── docs/
-│   ├── adr/                 # Architecture Decision Records
 │   ├── ADAPTATION_GUIDE.md  # Step-by-step: replace examples with your domain
 │   └── CONVENTIONS.md       # Naming, imports, selector and builder rules
 ├── src/
@@ -114,11 +113,11 @@ npx playwright test --grep @critical
 
 ## 📋 Engineering Standards
 
-**Encapsulation** - Locators are private. Page Objects expose domain actions (`login()`, `assertOpen()`), not Playwright internals. Tests express business intent only. See [ADR 0001](docs/adr/0001-domain-first-test-api.md).
+**Encapsulation** - Locators are private. Page Objects expose domain actions (`login()`, `assertOpen()`), not Playwright internals. Tests express business intent only.
 
-**Fixture composition** - `apiTest` provides typed API clients. `test` extends it with Page Objects. Auth is worker-scoped via `createAuthTest(role)`. See [ADR 0002](docs/adr/0002-fixture-architecture.md).
+**Fixture composition** - `apiTest` provides typed API clients. `test` extends it with Page Objects. Auth is worker-scoped via `createAuthTest(role)`.
 
-**Selector strategy** - `getByRole` and semantic locators first. CSS strings isolated to components. XPath prohibited. See [ADR 0003](docs/adr/0003-selector-strategy.md).
+**Selector strategy** - `getByRole` and semantic locators first. CSS strings isolated to components. XPath prohibited.
 
 **API-first data setup** - Create test data via API before UI tests. Faster and more reliable than navigating setup flows through the browser.
 
