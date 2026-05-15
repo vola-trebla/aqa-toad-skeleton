@@ -5,7 +5,8 @@ services:
     build: 
       context: ..
       dockerfile: docker/Dockerfile
-    command: npx playwright test --shard=1/2 --project=regression-chrome
+    # Updated to use the universal project 'chromium'
+    command: npx playwright test --shard=1/2 --project=chromium
     environment:
       - BASE_URL=${BASE_URL}
       - API_URL=${API_URL}
@@ -18,7 +19,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    command: npx playwright test --shard=2/2 --project=regression-chrome
+    # Updated to use the universal project 'chromium'
+    command: npx playwright test --shard=2/2 --project=chromium
     environment:
       - BASE_URL=${BASE_URL}
       - API_URL=${API_URL}

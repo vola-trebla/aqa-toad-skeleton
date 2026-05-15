@@ -33,15 +33,15 @@ Fixtures are the "glue" of the framework.
 - **Action**: Update `src/fixtures/page.fixtures.ts` to include your new Page Objects.
 - **Action**: Update `src/fixtures/api.fixtures.ts` to include your new API Clients.
 
-## 5. Purging the Demo (OrangeHRM)
+## 5. Purging the Examples
 
-Once you've understood the patterns, you can remove the demo files:
+Once you've understood the patterns, you can remove the example files:
 
-1. Delete `tests/smoke/`, `tests/critical/`, `tests/regression/`, `tests/api/`.
-2. Delete `src/pages/*.page.ts` (except base classes).
-3. Delete `src/api/clients/employee.client.ts`.
-4. Delete `src/api/schemas/employee.schema.ts`.
-5. Clean up `src/constants/` from OrangeHRM-specific selectors and routes.
+1. Delete `tests/*/example.*.spec.ts`.
+2. Delete `src/pages/example.page.ts`.
+3. Delete `src/api/clients/example.client.ts`.
+4. Delete `src/api/schemas/example.schema.ts`.
+5. Clean up `src/constants/api-endpoints.ts` and `src/constants/routes.ts`.
 
 ## 🚀 Pro-tip: Keep the Patterns, Change the Content
 

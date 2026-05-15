@@ -6,7 +6,7 @@ import { Page, Response } from '@playwright/test';
  * request so Playwright can intercept it even if the response arrives fast.
  *
  * @example
- * const done = waitForApi(page, ApiEndpoints.pim.employees);
+ * const done = waitForApi(page, '/api/items');
  * await searchBtn.click();
  * await done;
  */
