@@ -11,12 +11,16 @@ import { step } from '@/core/step';
 export class ExampleDetailPage extends BasePage {
   private readonly heading: Locator;
 
+  // Initialized in constructor body because heading is assigned there first
+  readonly expect: ExampleDetailPageExpectations;
+
   constructor(
     page: Page,
     private readonly itemId: number
   ) {
     super(page);
     this.heading = page.getByRole('heading', { level: 1 });
+    this.expect = new ExampleDetailPageExpectations({ heading: this.heading });
   }
 
   get url(): string {
@@ -29,10 +33,18 @@ export class ExampleDetailPage extends BasePage {
       await this.waitForPageLoad();
     });
   }
+}
 
-  async assertTitle(expected: string): Promise<void> {
-    await step('Verify item detail title', async () => {
-      await expect(this.heading).toHaveText(expected);
+/**
+ * All expect() calls for ExampleDetailPage live here.
+ * Tests access assertions via: detailPage.expect.toHaveTitle('My Item')
+ */
+class ExampleDetailPageExpectations {
+  constructor(private readonly locators: { heading: Locator }) {}
+
+  async toHaveTitle(expected: string): Promise<void> {
+    await step(`Verify item detail title: "${expected}"`, async () => {
+      await expect(this.locators.heading).toHaveText(expected);
     });
   }
 }

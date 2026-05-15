@@ -10,9 +10,6 @@ test.describe('Example Smoke Suite', { tag: [TestTags.smoke] }, () => {
     // 1. Navigate to the page
     // The URL is defined inside the Page Object
     await examplePage.navigate();
-
-    // 2. Assert page state
-    // Use domain assertions from the Page Object to keep the spec clean
-    await examplePage.assertOpen();
+    await examplePage.expect.toBeOpen();
   });
 });
