@@ -1,8 +1,6 @@
 /**
- * 🐸 TEST TAGS
- *
- * Use tags to group tests into suites.
- * Filter them via command line: `npx playwright test --grep @smoke`
+ * Test tags for grouping and filtering test suites.
+ * Filter via CLI: `npx playwright test --grep @smoke`
  */
 export const TestTags = {
   smoke: '@smoke',

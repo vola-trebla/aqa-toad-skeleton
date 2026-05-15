@@ -3,19 +3,15 @@ import { StaticRoutePage } from '@/core/static-route.page';
 import { step } from '@/core/step';
 
 /**
- * 🐸 EXAMPLE PAGE OBJECT
- *
- * Demonstrates the best practices for Page Objects:
- * 1. Private locators initialized in the constructor.
- * 2. Public high-level domain actions (login, submitForm).
- * 3. Public assertions (assertOpen, assertError).
+ * Example Page Object demonstrating framework conventions:
+ *   1. Private locators - never exposed to test specs.
+ *   2. Public domain actions (login, submitForm) - describe user intent.
+ *   3. Public assertions (assertOpen, assertError) - use Playwright's auto-retrying expect.
  */
 export class ExamplePage extends StaticRoutePage {
   // Use StaticRoutePage if the page has a fixed URL, otherwise extend BasePage
   readonly url = '/example';
 
-  // --- Locators ---
-  // Keep them private! The test should only care about actions and assertions.
   private readonly usernameInput = this.page.getByRole('textbox', { name: 'Username' });
   private readonly passwordInput = this.page.getByPlaceholder('Enter your password');
   private readonly loginButton = this.page.getByRole('button', { name: 'Login' });
@@ -25,9 +21,6 @@ export class ExamplePage extends StaticRoutePage {
     super(page);
   }
 
-  // --- Domain Actions ---
-  // These should represent real user behaviors.
-
   async login(user: string, pass: string): Promise<void> {
     await step(`Login as ${user}`, async () => {
       await this.usernameInput.fill(user);
@@ -35,9 +28,6 @@ export class ExamplePage extends StaticRoutePage {
       await this.loginButton.click();
     });
   }
-
-  // --- Assertions ---
-  // Use built-in expect() for auto-retrying and better error messages.
 
   async assertOpen(): Promise<void> {
     await step('Verify Example Page is open', async () => {

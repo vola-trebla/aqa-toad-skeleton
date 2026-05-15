@@ -1,19 +1,24 @@
 import { Locator, Page } from '@playwright/test';
 
 /**
- * 🐸 BASE COMPONENT
+ * Base class for reusable UI components (tables, modals, navbars, etc.).
+ * Encapsulates a root Locator so all child locators are scoped to the component.
  *
- * Use this for reusable UI widgets like Tables, Modals, or Navbars.
- * It encapsulates a root locator so the component is self-contained.
+ * Accepts a Locator (not a CSS string) so callers can use the full
+ * Playwright locator API: getByRole, getByLabel, getByTestId, etc.
+ *
+ * @example
+ *   this.confirmModal = new ConfirmModal(page, page.getByRole('dialog'));
+ *   this.banner = new NotificationBanner(page, page.getByRole('alert'));
  */
 export abstract class BaseComponent {
   protected readonly root: Locator;
 
   constructor(
     protected readonly page: Page,
-    selector: string
+    root: Locator
   ) {
-    this.root = page.locator(selector);
+    this.root = root;
   }
 
   async isVisible(): Promise<boolean> {
@@ -28,7 +33,7 @@ export abstract class BaseComponent {
   }
 
   /**
-   * Waits until the component vanishes into thin air.
+   * Waits until the component is no longer visible in the DOM.
    */
   async waitForHidden(): Promise<void> {
     await this.root.waitFor({ state: 'hidden' });

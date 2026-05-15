@@ -1,14 +1,10 @@
 import { Page } from '@playwright/test';
 
 /**
- * 🐸 BASE PAGE OBJECT
+ * Base class for all Page Objects.
  *
- * This is the grand-daddy of all your pages.
- * Every page in your project should extend this.
- *
- * Use it for:
- * - Shared helper methods (waitForPageLoad, closePopups)
- * - Page-wide properties
+ * Extend this to get shared utilities such as waitForPageLoad.
+ * Add global hooks here (cookie banners, popups) when they apply to every page.
  */
 export abstract class BasePage {
   constructor(protected readonly page: Page) {}

@@ -2,14 +2,8 @@ import { test } from '@/fixtures';
 import { TestTags } from '@/constants/test-tags';
 
 /**
- * 🐸 SMOKE TESTS
- *
- * Smoke tests should be:
- * - Fast (run in < 1 minute)
- * - Critical (verify the "Happy Path" only)
- * - Reliable (zero flakiness)
- *
- * Tag them with TestTags.smoke for easy filtering in CI.
+ * Smoke tests - verify the critical happy path only.
+ * Must be fast (< 1 minute total), stable, and tagged with TestTags.smoke.
  */
 test.describe('Example Smoke Suite', { tag: [TestTags.smoke] }, () => {
   test('User can open example page and see essential elements', async ({ examplePage }) => {

@@ -1,8 +1,6 @@
 /**
- * 🐸 API ENDPOINTS
- *
- * Keep all your API paths here.
- * Use functions for endpoints with parameters (e.g., /items/${id}).
+ * Centralized API endpoint paths.
+ * Use functions for parameterized endpoints (e.g., /items/${id}).
  */
 export const ApiEndpoints = {
   example: {

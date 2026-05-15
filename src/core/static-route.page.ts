@@ -2,12 +2,10 @@ import { BasePage } from './base.page';
 import { step } from './step';
 
 /**
- * 🐸 STATIC ROUTE PAGE
+ * Base class for pages with a fixed, parameter-less URL (e.g. /login, /dashboard).
+ * Provides a navigate() method out of the box.
  *
- * Use this for pages that have a fixed, parameter-less URL (e.g., /login, /dashboard).
- * It provides a convenient `navigate()` method out of the box.
- *
- * For dynamic URLs (e.g., /user/123), extend `BasePage` instead.
+ * For dynamic URLs (e.g. /items/123), extend BasePage directly and implement navigate() yourself.
  */
 export abstract class StaticRoutePage extends BasePage {
   /**

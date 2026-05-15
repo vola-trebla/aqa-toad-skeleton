@@ -1,21 +1,21 @@
 import { test } from '@/fixtures';
 
 /**
- * 🐸 CRITICAL PATH TESTS
- *
- * These tests cover the most important business flows (E2E).
- * If these fail, the product is broken.
+ * Critical path tests - cover the most important E2E business flows.
+ * A failure here means the core product is broken.
  */
 test.describe('Example Critical Flow', () => {
-  test('Complete item lifecycle', async ({ examplePage, api }) => {
-    // 1. Data Setup via API (Lightning fast!)
+  test('Complete item lifecycle', async ({ api, getItemDetail }) => {
+    // 1. Create test data via API - fast and reliable
     const item = await api.example.createItem({ name: 'Critical Item' });
+    await api.example.expect.toHaveCorrectName(item, 'Critical Item');
 
-    // 2. UI Verification
-    await examplePage.navigate();
-    // Use the created item's name for UI search
-    // await examplePage.searchForItem(item.name);
+    // 2. Navigate to the item's detail page using the dynamic page factory
+    //    getItemDetail() is a fixture that returns a new ExampleDetailPage(page, id)
+    const detailPage = getItemDetail(item.id);
+    await detailPage.navigate();
 
-    console.log(`Successfully created item with ID: ${item.id}`);
+    // 3. Assert the UI reflects what the API created
+    // await detailPage.assertTitle(item.name);
   });
 });

@@ -1,10 +1,8 @@
 import { z } from 'zod';
 
 /**
- * 🐸 API SCHEMAS
- *
- * Use Zod to define your domain entities and API contracts.
- * This ensures type safety and runtime validation of API responses.
+ * Zod schemas for domain entities and API contracts.
+ * Provides compile-time types and runtime validation of API responses.
  */
 
 // --- Domain Entity ---

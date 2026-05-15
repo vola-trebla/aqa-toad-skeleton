@@ -4,30 +4,19 @@ import { step } from '@/core/step';
 import { BaseApiClient } from './base.client';
 
 /**
- * 🐸 EXAMPLE API CLIENT
- *
- * This class encapsulates all API calls for a specific domain (e.g., Items, Users, Orders).
- * It inherits from BaseApiClient to leverage shared parsing and error handling.
+ * Example API client for a single domain (Items, Users, Orders, etc.).
+ * Extends BaseApiClient for shared response parsing and error handling.
  */
 export class ExampleApiClient extends BaseApiClient {
-  /**
-   * Expectations specific to this domain.
-   */
   readonly expect = new ExampleExpectations();
 
-  /**
-   * Example POST request.
-   */
   async createItem(request: CreateItemRequest): Promise<Item> {
     const response = await this.request.post('/api/items', { data: request });
-    // parseResponse validates the JSON against your Zod schema and returns typed data
+    // parseResponse validates JSON against the Zod schema and throws ApiError on non-2xx
     const envelope = await this.parseResponse(response, itemResponseSchema);
     return envelope.data;
   }
 
-  /**
-   * Example GET request.
-   */
   async getItem(id: number): Promise<Item> {
     const response = await this.request.get(`/api/items/${id}`);
     const envelope = await this.parseResponse(response, itemResponseSchema);
@@ -36,9 +25,8 @@ export class ExampleApiClient extends BaseApiClient {
 }
 
 /**
- * 🐸 DOMAIN EXPECTATIONS
- *
- * Keep your business-logic assertions here to keep tests clean.
+ * Domain-specific assertions for this client.
+ * Keeps business-logic checks out of test specs and makes them reusable.
  */
 export class ExampleExpectations {
   async toHaveCorrectName(item: Item, expectedName: string): Promise<void> {

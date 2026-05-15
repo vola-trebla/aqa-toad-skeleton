@@ -2,11 +2,8 @@ import { APIRequestContext } from '@playwright/test';
 import { ExampleApiClient } from './clients/example.client';
 
 /**
- * 🐸 API REGISTRY
- *
- * Central registry of all API clients.
- * Extend this interface and factory when adding new domain clients.
- * This pattern allows fixtures to access all clients via a single object.
+ * Central registry of all typed API clients.
+ * Add new domain clients here so fixtures can expose them via a single `api` object.
  */
 export interface ApiRegistry {
   example: ExampleApiClient;

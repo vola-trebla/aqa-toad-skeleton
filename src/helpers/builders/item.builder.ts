@@ -3,10 +3,8 @@ import { CreateItemRequest, createItemRequestSchema } from '@/api/schemas/exampl
 import { BaseBuilder } from './base.builder';
 
 /**
- * 🐸 EXAMPLE BUILDER
- *
- * Builders help you create complex data objects with sensible defaults.
- * They are especially useful for API payloads.
+ * Example builder for the Item domain entity.
+ * Generates valid API payloads with randomized defaults.
  */
 export class ItemBuilder extends BaseBuilder<CreateItemRequest> {
   protected readonly schema = createItemRequestSchema;
@@ -18,7 +16,7 @@ export class ItemBuilder extends BaseBuilder<CreateItemRequest> {
   protected get defaults(): CreateItemRequest {
     return {
       name: `Item-${randomUUID().slice(0, 8)}`,
-      description: 'Built with the Toad Builder 🐸',
+      description: 'Auto-generated item',
     };
   }
 

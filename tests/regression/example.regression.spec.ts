@@ -2,12 +2,7 @@ import { test } from '@/fixtures';
 import { TestTags } from '@/constants/test-tags';
 
 /**
- * 🐸 REGRESSION TESTS
- *
- * Regression tests cover:
- * - Edge cases
- * - Bug fixes
- * - Complex multi-step scenarios
+ * Regression tests - cover edge cases, bug fixes, and complex multi-step scenarios.
  */
 test.describe('Example Regression Suite', { tag: [TestTags.regression] }, () => {
   test('User cannot login with empty credentials', async ({ examplePage }) => {

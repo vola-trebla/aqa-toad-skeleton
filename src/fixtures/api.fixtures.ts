@@ -6,10 +6,7 @@ export type ApiFixtures = {
 };
 
 /**
- * 🐸 API FIXTURE
- *
- * Provides access to all API clients via the `api` object.
- * This is an asynchronous fixture that sets up the registry for each test.
+ * Provides access to all typed API clients via the `api` fixture object.
  */
 export const apiTest = base.extend<ApiFixtures>({
   api: async ({ request }, use) => {

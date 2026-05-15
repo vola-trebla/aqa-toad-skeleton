@@ -4,10 +4,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 /**
- * 🐸 AUTH FIXTURES
- *
- * This file demonstrates how to implement "Global Auth" or "Worker-scoped Auth".
- * Instead of logging in before every test, we do it once per worker and reuse the state.
+ * Worker-scoped authentication fixtures.
+ * Login runs once per worker and the resulting storage state is reused across all tests in that worker.
  */
 
 export type AuthWorkerFixtures = {
@@ -15,7 +13,7 @@ export type AuthWorkerFixtures = {
 };
 
 /**
- * Factory that creates an authenticated test base.
+ * Returns a Playwright test base with worker-scoped storage state for the given role.
  */
 export function createAuthTest(role: string) {
   return base.extend<object, AuthWorkerFixtures>({
@@ -36,7 +34,7 @@ export function createAuthTest(role: string) {
         });
 
         /**
-         * 🐸 IMPLEMENT YOUR LOGIN LOGIC HERE
+         * Implement your login logic here.
          *
          * Example for a standard API login:
          *
@@ -47,7 +45,7 @@ export function createAuthTest(role: string) {
          *   }
          * });
          *
-         * if (!loginResponse.ok()) throw new Error('Auth failed!');
+         * if (!loginResponse.ok()) throw new Error('Login failed');
          */
 
         // For now, we'll just save an empty state as a placeholder
@@ -65,6 +63,6 @@ export function createAuthTest(role: string) {
 }
 
 /**
- * Use `authTest` in your specs instead of `test` to have an authenticated browser.
+ * Drop-in replacement for `test` that injects a pre-authenticated browser context.
  */
 export const authTest = createAuthTest('admin');

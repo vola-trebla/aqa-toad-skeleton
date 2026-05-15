@@ -1,8 +1,6 @@
 /**
- * 🐸 UI ROUTES
- *
- * Central place for all application URLs.
- * Use these in your Page Objects instead of hardcoding strings.
+ * Centralized UI route paths.
+ * Use these in Page Objects instead of hardcoding strings.
  */
 export const Routes = {
   home: '/',
