@@ -16,6 +16,6 @@ test.describe('Example Critical Flow', () => {
     await detailPage.navigate();
 
     // 3. Assert the UI reflects what the API created
-    // await detailPage.assertTitle(item.name);
+    // await detailPage.expect.toHaveTitle(item.name);
   });
 });

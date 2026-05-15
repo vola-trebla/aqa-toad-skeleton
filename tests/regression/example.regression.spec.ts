@@ -13,7 +13,6 @@ test.describe('Example Regression Suite', { tag: [TestTags.regression] }, () => 
     await examplePage.login('', '');
 
     // 3. Verification
-    // Note: ExamplePage should have appropriate locators/assertions for errors
-    // await examplePage.assertStatusMessage('Required');
+    // await examplePage.expect.toShowStatusMessage('Required');
   });
 });

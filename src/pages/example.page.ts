@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { StaticRoutePage } from '@/core/static-route.page';
 import { step } from '@/core/step';
 
@@ -6,16 +6,25 @@ import { step } from '@/core/step';
  * Example Page Object demonstrating framework conventions:
  *   1. Private locators - never exposed to test specs.
  *   2. Public domain actions (login, submitForm) - describe user intent.
- *   3. Public assertions (assertOpen, assertError) - use Playwright's auto-retrying expect.
+ *   3. All assertions live in ExamplePageExpectations, accessed via page.expect.
  */
 export class ExamplePage extends StaticRoutePage {
-  // Use StaticRoutePage if the page has a fixed URL, otherwise extend BasePage
   readonly url = '/example';
 
   private readonly usernameInput = this.page.getByRole('textbox', { name: 'Username' });
   private readonly passwordInput = this.page.getByPlaceholder('Enter your password');
   private readonly loginButton = this.page.getByRole('button', { name: 'Login' });
   private readonly statusMessage = this.page.locator('.status-message');
+
+  // Initialized after locators - field initializers run in declaration order
+  readonly expect = new ExamplePageExpectations(
+    this.page,
+    {
+      usernameInput: this.usernameInput,
+      statusMessage: this.statusMessage,
+    },
+    this.url
+  );
 
   constructor(page: Page) {
     super(page);
@@ -28,17 +37,32 @@ export class ExamplePage extends StaticRoutePage {
       await this.loginButton.click();
     });
   }
+}
 
-  async assertOpen(): Promise<void> {
+/**
+ * All expect() calls for ExamplePage live here.
+ * Tests access assertions via: examplePage.expect.toBeOpen()
+ */
+class ExamplePageExpectations {
+  constructor(
+    private readonly page: Page,
+    private readonly locators: {
+      usernameInput: Locator;
+      statusMessage: Locator;
+    },
+    private readonly url: string
+  ) {}
+
+  async toBeOpen(): Promise<void> {
     await step('Verify Example Page is open', async () => {
-      await expect(this.page, 'URL should match example page').toHaveURL(new RegExp(this.url));
-      await expect(this.usernameInput, 'Username input should be visible').toBeVisible();
+      await expect(this.page).toHaveURL(new RegExp(this.url));
+      await expect(this.locators.usernameInput).toBeVisible();
     });
   }
 
-  async assertStatusMessage(message: string): Promise<void> {
-    await step(`Verify status message: ${message}`, async () => {
-      await expect(this.statusMessage).toHaveText(message);
+  async toShowStatusMessage(message: string): Promise<void> {
+    await step(`Verify status message: "${message}"`, async () => {
+      await expect(this.locators.statusMessage).toHaveText(message);
     });
   }
 }
