@@ -16,21 +16,37 @@ This file defines the foundational identity and workflows for the AQA-TOAD-SKELE
 - **Validation**: Zod (contract testing & env validation)
 - **Automation**: Husky + Prettier + ESLint (standard 2025-2026 setup)
 - **Reporting**: Allure + custom Slack reporter (`src/reporters/slack.reporter.ts`)
-- **CI/CD**: GitHub Actions (`lint.yml` = PR gate, `nightly.yml` = scheduled regression with sharding)
+- **CI/CD**: GitHub Actions (`lint.yml` = PR gate with smoke tests, `nightly.yml` = scheduled regression with sharding)
 - **Docker**: `docker/docker-compose.yml` with 2-shard parallel runs
 
 ## 🏗 Key Architecture Patterns
 
-Understanding these patterns is essential before making changes:
+Understanding these patterns is essential before making any changes.
 
-- **BaseApiClient** (`src/api/clients/base.client.ts`): `parseResponse` throws on non-2xx (use in setup/happy-path), `tryParseResponse` returns a discriminated union (use in negative tests).
-- **ApiRegistry** (`src/api/registry.ts`): single entry point for all API clients. Tests access `api.example.createItem()` - never instantiate clients directly.
-- **Fixture chain**: `base (Playwright)` → `apiTest` (adds `api` registry) → `test` (adds Page Objects). Always import `test` from `@/fixtures`, never from `@playwright/test` directly.
-- **Worker-scoped auth**: `createAuthTest(role)` factory in `src/fixtures/auth.fixtures.ts`. Saves storage state once per worker, not per test.
-- **Immutable builders** (`src/helpers/builders/`): `defaults` is a getter so random values (UUIDs) are fresh on every `build()`. `with()` returns a new instance - no mutation.
-- **Domain Expectations**: colocated with API clients as `readonly expect = new ExampleExpectations()`. Tests call `api.example.expect.toHaveCorrectName(item, name)`.
-- **StaticRoutePage vs BasePage**: `StaticRoutePage` for fixed URLs (provides `navigate()`), `BasePage` for dynamic URLs (e.g., `/users/123`).
-- **BaseComponent** (`src/core/base.component.ts`): root-locator pattern for reusable UI widgets (tables, modals). Accepts a CSS selector string.
+### API Layer
+
+- **BaseApiClient** (`src/api/clients/base.client.ts`): two methods - `parseResponse` throws on non-2xx (happy-path and setup), `tryParseResponse` returns a discriminated union (negative tests, no try/catch needed).
+- **ApiRegistry** (`src/api/registry.ts`): single entry point - `api.example.createItem()`. Never instantiate clients directly in tests.
+- **Domain Expectations on API**: `ExampleExpectations` lives in the same file as `ExampleApiClient` and is accessed via `api.example.expect.toHaveCorrectName()`. All API `expect()` calls live here.
+
+### UI Layer
+
+- **Page Object hierarchy**: `BasePage` (dynamic URLs) → `StaticRoutePage` (fixed URLs, provides `navigate()`). Locators are always `private`.
+- **Domain Expectations on UI**: every Page Object has a `readonly expect` property pointing to a `*PageExpectations` class defined in the same file (not exported). All UI `expect()` calls live there - never in action methods or test specs.
+  - `ExamplePage` - field initializer: `readonly expect = new ExamplePageExpectations(this.page, { ...locators }, this.url)`
+  - `ExampleDetailPage` - constructor assignment (locators set in constructor body, so `expect` must follow): `this.expect = new ExampleDetailPageExpectations({ heading: this.heading })`
+- **BaseComponent** (`src/core/base.component.ts`): accepts a `Locator` (not a CSS string). All child locators scoped via `this.root`. See `src/components/notification-banner.component.ts` for a working example.
+- **Dynamic page factory**: `getItemDetail(id)` fixture in `src/fixtures/page.fixtures.ts` returns `new ExampleDetailPage(page, id)` - used when the URL contains a runtime parameter.
+
+### Data & Fixtures
+
+- **Immutable builders** (`src/helpers/builders/`): `defaults` is a getter so random values (UUIDs) are fresh per `build()`. `with()` returns a new instance.
+- **Fixture chain**: `base (Playwright)` → `apiTest` (adds `api` registry) → `test` (adds Page Object factories). Always import `test` from `@/fixtures`.
+- **Worker-scoped auth**: `createAuthTest(role)` factory in `src/fixtures/auth.fixtures.ts`. Saves storage state once per worker. Implement login logic there and use `authTest` in specs that require authentication.
+
+### Golden Rule on `expect()`
+
+`expect()` is **only** allowed inside `*Expectations` classes. Never in Page Object action methods, never in test specs directly (except for truly one-off assertions with no business meaning). Tests express intent through domain language only.
 
 ## 📋 Operational Workflows & Golden Rules
 

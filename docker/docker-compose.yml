@@ -1,17 +1,21 @@
 version: '3.8'
 
+# Runs the full test suite in parallel across 2 shards.
+# Usage: BASE_URL=https://your-app.com docker compose up --build
+# Results land in ./results/shard-1 and ./results/shard-2.
+
 services:
   tests-shard-1:
-    build: 
+    build:
       context: ..
       dockerfile: docker/Dockerfile
-    # Updated to use the universal project 'chromium'
     command: npx playwright test --shard=1/2 --project=chromium
     environment:
       - BASE_URL=${BASE_URL}
       - API_URL=${API_URL}
       - ADMIN_USERNAME=${ADMIN_USERNAME}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - CI=true
     volumes:
       - ../results/shard-1:/app/test-results
 
@@ -19,12 +23,12 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    # Updated to use the universal project 'chromium'
     command: npx playwright test --shard=2/2 --project=chromium
     environment:
       - BASE_URL=${BASE_URL}
       - API_URL=${API_URL}
       - ADMIN_USERNAME=${ADMIN_USERNAME}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - CI=true
     volumes:
       - ../results/shard-2:/app/test-results

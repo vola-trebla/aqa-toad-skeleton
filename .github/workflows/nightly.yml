@@ -28,11 +28,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
 
-      # 🐸 SKELETON NOTE:
-      # Regression tests usually cover complex scenarios. 
-      # In this skeleton, we use sharding to demonstrate scalability.
-      - name: Run regression shard
-        # Note: Using project 'chromium' instead of 'regression-chrome'
+      # Full suite split across 2 shards. Reports are merged in the next job.
+      - name: Run regression shard ${{ matrix.shard }}/2
         run: npx playwright test --project=chromium --shard=${{ matrix.shard }}/2 --reporter=blob
         env:
           BASE_URL: ${{ secrets.BASE_URL || 'https://example.com' }}
@@ -49,7 +46,7 @@ jobs:
           path: blob-report/
           retention-days: 14
 
-      - name: Upload traces & screenshots on failure
+      - name: Upload traces on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
